@@ -9,8 +9,9 @@ const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 
 const routes = require("./routes");
-const db = require("./config/index");
-const User = require("./models/Users")
+const db = require("./db/index");
+const User = require("./models/User")
+const Admin = require("./models/Admin")
 
 const app = express();
 
@@ -28,7 +29,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-passport.use(
+passport.use("user",
     new LocalStrategy(
         
         {
@@ -54,6 +55,31 @@ passport.use(
     }
   )
 );
+
+passport.use("admin", 
+    new LocalStrategy(
+    {
+        usernameField: "email",
+        passwordField: "contraseña",
+    },
+    
+    function (email, password, done) {
+        Admin.findOne({
+            where:{
+              email:email
+            }
+          })
+          .then(admin => {
+            if (!admin) return done(null, false)
+            admin.setHash(password, admin.salt)
+            .then(hash => {
+                if (hash !== admin.contraseña) return done(null, false)
+                done(null, admin)  
+            })
+        })
+        .catch(done)
+    }
+));
 
 passport.serializeUser(function(user, done) {
     done(null, user.id); 

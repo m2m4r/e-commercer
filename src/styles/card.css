@@ -1,0 +1,22 @@
+.card {
+  list-style: none;
+  font-size: 1.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.cardImage {
+  border-radius: 10px;
+  background-color: azure;
+  margin-bottom: 20px;
+}
+
+p {
+  font-size: small;
+  color: gray;
+}
+
+li.card h3 {
+  font-size: 1rem;
+}

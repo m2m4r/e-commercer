@@ -1,0 +1,13 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 270px);
+  gap: 20px;
+  padding: 80px;
+  justify-content: center;
+  width: 80%;
+}
+
+.contenedor {
+  display: flex;
+  justify-content: center;
+}
