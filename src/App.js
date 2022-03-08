@@ -1,23 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+import { Routes, Route } from "react-router";
+import "./App.css";
+
+/* Renderizado condicional, admin y carrito si no hay un User loggeado */
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {"Navbar"}
+      <Routes>
+        <Route path="/home" element={"home"} />
+        <Route path="/register" element={"register"} />
+        <Route path="/login" element={"login"} />
+        <Route path="/admin" element={"admin"} />
+        <Route path="/cart" element={"cart"} />
+        <Route path="/sku" element={"productCard"} />
+      </Routes>
+      {"Footer re cheto"}
     </div>
   );
 }
