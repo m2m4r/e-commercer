@@ -1,0 +1,8 @@
+{
+    "database": "e-commerce",
+    "options": {
+      "dialect": "postgres",
+      "host": "localhost",
+      "logging": false
+    }
+  }
