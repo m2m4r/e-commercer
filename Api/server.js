@@ -11,7 +11,7 @@ const LocalStrategy = require('passport-local').Strategy
 const routes = require("./routes");
 const db = require("./db/index");
 const User = require("./models/User")
-const Admin = require("./models/Admin")
+
 
 const app = express();
 
@@ -56,38 +56,19 @@ passport.use("user",
   )
 );
 
-passport.use("admin", 
-    new LocalStrategy(
-    {
-        usernameField: "email",
-        passwordField: "contraseña",
-    },
-    
-    function (email, password, done) {
-        Admin.findOne({
-            where:{
-              email:email
-            }
-          })
-          .then(admin => {
-            if (!admin) return done(null, false)
-            admin.setHash(password, admin.salt)
-            .then(hash => {
-                if (hash !== admin.contraseña) return done(null, false)
-                done(null, admin)  
-            })
-        })
-        .catch(done)
-    }
-));
+
 
 passport.serializeUser(function(user, done) {
+    console.log("serialeze------>",user)
     done(null, user.id); 
 });
 
 passport.deserializeUser(function(id, done) { 
     User.findByPk(id) 
-      .then(user => done(null, user))
+      .then(user =>{
+        console.log(user)
+        done(null, user)
+      } )
       .catch(done)
 });
 

@@ -23,7 +23,13 @@ router.post("/register", async (req, res, next) =>{
 )
 
 router.post('/login', passport.authenticate('user'), (req, res) =>  {
-    res.send(req.user);
+    
+    res.send(req.user)
+    
+});
+
+router.post('/stock', (req, res) =>  {
+    res.send("asdasd")
 });
 
 
