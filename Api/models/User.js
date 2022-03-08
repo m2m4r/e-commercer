@@ -69,6 +69,10 @@ User.init({
             notEmpty:true
         }
     },
+    permiso:{
+        type: S.DataTypes.STRING,
+        defaultValue: "user"
+    }
 
 
 },{
