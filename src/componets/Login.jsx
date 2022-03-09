@@ -1,26 +1,40 @@
-import useInput from "../hook/useInput";
+import React from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
-import React from "react";
+import { useDispatch } from "react-redux";
+
+
+import useInput from "../hook/useInput";
+import { setUser , sendLogin } from "../states/usario";
+
+
 //importar setUser de redux
 const Login = function(){
     //setUser
     const navigate = useNavigate();
     const email = useInput();
     const pass = useInput();
+    const dispatch = useDispatch()
 
+    // const handleLogin = (e) => {
+    //     console.log("hasta acá funciona")
+    //     e.preventDefault();
+    //     axios
+    //         .post("/api/login", { //consultar ruta al back team
+    //         email: email.value,
+    //         password: pass.value
+    //         })
+    //         .then((res) => { dispatch(setUser(res.data))// setear el usuario redux---luego para pedir user en otros comp, usamos useSelector
+    //         navigate("/")}) //definir a donde redirecciona
+    //         .catch(err=>console.log(err))
+    // };
     const handleLogin = (e) => {
-        console.log("hasta acá funciona")
         e.preventDefault();
-        axios
-            .post("/api/login", { //consultar ruta al back team
-            email: email.value,
-            password: pass.value
-            })
-            .then((res) => { //setUser(res.data) setear el usuario en fron
-            navigate("/")}) //definir a donde redirecciona
-            .catch(err=>console.log(err))
-    };
+        dispatch(sendLogin(email , pass))
+        .then((res)=>{console.log(res)
+        navigate('/home')})
+        .catch((err)=>console.log(err))
+    }
     const register = ()=>{
         navigate("/register")
     }

@@ -15,7 +15,7 @@ const Register = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         axios
-            .post("/api/register", {
+            .post("/api/users/register", {
             nombre: firstName.value,
             apellido: lastName.value,
             documento: dni.value,
@@ -32,91 +32,91 @@ const Register = () => {
         navigate("/login")
     }
     return(
-        <form id="login" class="container" onSubmit={handleSubmit}>
+        <form id="login" className="container" onSubmit={handleSubmit}>
             <h3>Register</h3><br/>
-            <div  class="field">
-                <p class="control has-icons-left has-icons-right">
-                    <input {...firstName} class="input" type="text" placeholder="Name"/>
-                    <span class="icon is-small is-left">
-                    <i class="fas fa-envelope"></i>
+            <div  className="field">
+                <p className="control has-icons-left has-icons-right">
+                    <input {...firstName} className="input" type="text" placeholder="Name"/>
+                    <span className="icon is-small is-left">
+                    <i className="fas fa-envelope"></i>
                     </span>
-                    <span class="icon is-small is-right">
-                    <i class="fas fa-check"></i>
-                    </span>
-                </p>
-            </div>
-            <div  class="field">
-                <p class="control has-icons-left has-icons-right">
-                    <input {...lastName} class="input" type="text" placeholder="Last name"/>
-                    <span class="icon is-small is-left">
-                    <i class="fas fa-envelope"></i>
-                    </span>
-                    <span class="icon is-small is-right">
-                    <i class="fas fa-check"></i>
+                    <span className="icon is-small is-right">
+                    <i className="fas fa-check"></i>
                     </span>
                 </p>
             </div>
-            <div  class="field">
-                <p class="control has-icons-left has-icons-right">
-                    <input {...dni} class="input" type="number" placeholder="DNI"/>
-                    <span class="icon is-small is-left">
-                    <i class="fas fa-envelope"></i>
+            <div  className="field">
+                <p className="control has-icons-left has-icons-right">
+                    <input {...lastName} className="input" type="text" placeholder="Last name"/>
+                    <span className="icon is-small is-left">
+                    <i className="fas fa-envelope"></i>
                     </span>
-                    <span class="icon is-small is-right">
-                    <i class="fas fa-check"></i>
-                    </span>
-                </p>
-            </div>
-            <div  class="field">
-                <p class="control has-icons-left has-icons-right">
-                    <input {...userName} class="input" type="text" placeholder="Username"/>
-                    <span class="icon is-small is-left">
-                    <i class="fas fa-envelope"></i>
-                    </span>
-                    <span class="icon is-small is-right">
-                    <i class="fas fa-check"></i>
+                    <span className="icon is-small is-right">
+                    <i className="fas fa-check"></i>
                     </span>
                 </p>
             </div>
-            <div  class="field">
-                <p class="control has-icons-left has-icons-right">
-                    <input {...email} class="input" type="email" placeholder="Email"/>
-                    <span class="icon is-small is-left">
-                    <i class="fas fa-envelope"></i>
+            <div  className="field">
+                <p className="control has-icons-left has-icons-right">
+                    <input {...dni} className="input" type="number" placeholder="DNI"/>
+                    <span className="icon is-small is-left">
+                    <i className="fas fa-envelope"></i>
                     </span>
-                    <span class="icon is-small is-right">
-                    <i class="fas fa-check"></i>
-                    </span>
-                </p>
-            </div>
-            <div  class="field">
-                <p class="control has-icons-left has-icons-right">
-                    <input {...telefono} class="input" type="number" placeholder="Phone"/>
-                    <span class="icon is-small is-left">
-                    <i class="fas fa-envelope"></i>
-                    </span>
-                    <span class="icon is-small is-right">
-                    <i class="fas fa-check"></i>
+                    <span className="icon is-small is-right">
+                    <i className="fas fa-check"></i>
                     </span>
                 </p>
             </div>
-            <div  class="field">
-                <p class="control has-icons-left">
-                    <input {...pass} class="input" type="password" placeholder="Password"/>
-                    <span class="icon is-small is-left">
-                    <i class="fas fa-lock"></i>
+            <div  className="field">
+                <p className="control has-icons-left has-icons-right">
+                    <input {...userName} className="input" type="text" placeholder="Username"/>
+                    <span className="icon is-small is-left">
+                    <i className="fas fa-envelope"></i>
+                    </span>
+                    <span className="icon is-small is-right">
+                    <i className="fas fa-check"></i>
                     </span>
                 </p>
             </div>
-            <input id="margen" type="submit" class="button is-success is-fullwidth" value="Sing Up"/>
-            <div id="margen" id="verticalCenter" class="field">
-                <p id="borderText" class="control">
+            <div  className="field">
+                <p className="control has-icons-left has-icons-right">
+                    <input {...email} className="input" type="email" placeholder="Email"/>
+                    <span className="icon is-small is-left">
+                    <i className="fas fa-envelope"></i>
+                    </span>
+                    <span className="icon is-small is-right">
+                    <i className="fas fa-check"></i>
+                    </span>
+                </p>
+            </div>
+            <div  className="field">
+                <p className="control has-icons-left has-icons-right">
+                    <input {...telefono} className="input" type="number" placeholder="Phone"/>
+                    <span className="icon is-small is-left">
+                    <i className="fas fa-envelope"></i>
+                    </span>
+                    <span className="icon is-small is-right">
+                    <i className="fas fa-check"></i>
+                    </span>
+                </p>
+            </div>
+            <div  className="field">
+                <p className="control has-icons-left">
+                    <input {...pass} className="input" type="password" placeholder="Password"/>
+                    <span className="icon is-small is-left">
+                    <i className="fas fa-lock"></i>
+                    </span>
+                </p>
+            </div>
+            <input id="margen" type="submit" className="button is-success is-fullwidth" value="Sing Up"/>
+            <div id="margen" id="verticalCenter" className="field">
+                <p id="borderText" className="control">
                     <a>Tenés una cuenta?</a>
                 </p>
             </div>
-            <div id="margen" class="field">
-                <p class="control">
-                    <button onClick={login} class="button is-link is-fullwidth">Sing In</button>
+            <div id="margen" className="field">
+                <p className="control">
+                    <button onClick={login} className="button is-link is-fullwidth">Sing In</button>
                 </p>
             </div>
         </form>

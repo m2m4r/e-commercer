@@ -9,4 +9,6 @@
 #borderText{
   border-bottom: 1px solid rgba(77, 75, 75 , 0.4);
   box-shadow: 0px 2px 0px rgba(168, 165, 165 , 0,2);
+  justify-content: center;
+  display: flex;
 }
