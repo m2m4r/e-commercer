@@ -6,7 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import "bulma/css/bulma.min.css";
 import {BrowserRouter} from 'react-router-dom'
 import store from "./store/store";
-import { BrowserRouter } from "react-router-dom";
+import {Provider} from "react-redux"
 
 ReactDOM.render(
   <BrowserRouter>
