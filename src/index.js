@@ -4,17 +4,15 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "bulma/css/bulma.min.css";
-import {BrowserRouter} from 'react-router-dom'
-import store from "./store/store";
 import { BrowserRouter } from "react-router-dom";
+import store from "./store/store";
+import { Provider } from "react-redux";
 
 ReactDOM.render(
   <BrowserRouter>
-
     <Provider store={store}>
       <App />
     </Provider>
-
   </BrowserRouter>,
   document.getElementById("root")
 );

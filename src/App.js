@@ -1,23 +1,21 @@
 import { Routes, Route } from "react-router";
 import Navbar from "./componets/Navbar";
-//import Grid from "./commons/Grid";
 
 /* Renderizado condicional, admin y carrito si no hay un User loggeado */
 
 function App() {
   return (
     <div className="App">
-      <Navbar/>
+      <Navbar />
       {"Navbar"}
+
       {/* <Grid /> EL grid queda aca de prueba hasta que este el home component */}
       {"Footer re cheto"}
-      </div>
     </div>
   );
 }
 
 export default App;
-
 
 /*
 Las routes quedan aca hasta que estén listos los componentes a renderizar 
