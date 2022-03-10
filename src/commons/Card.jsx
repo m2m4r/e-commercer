@@ -1,6 +1,5 @@
 import "../styles/card.css";
 const Card = (product) => {
-  console.log(product);
   return (
     <li className="card">
       <img
