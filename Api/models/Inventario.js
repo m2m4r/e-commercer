@@ -11,7 +11,7 @@ Inventario.init({
     // Model attributes are defined here
     talle: {  //modelo+talle
       type: S.DataTypes.DECIMAL,
-      allowNull: false,
+      allowNull: true,
   
     },
     stock: {

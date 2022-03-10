@@ -26,7 +26,7 @@ Productos.hasOne(Interaccion, {
 
 Interaccion.belongsTo(Productos);
 
-Productos.hasMany(Inventario, {as: 'talles'})
+Productos.hasMany(Inventario, {foreignKey :"product_id",  onDelete: 'cascade'})
 
 
 
