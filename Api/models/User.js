@@ -7,8 +7,6 @@ class User extends S.Model{
         return bcrypt.hash(password, salt)
     }
 }
-
-
 User.init({
     nombre:{
         type:S.DataTypes.STRING,
