@@ -1,0 +1,42 @@
+.cardetail {
+  display: flex;
+  align-items: center;
+  width: 80%;
+  margin: auto;
+}
+.fotito {
+  height: 450px;
+  width: auto;
+  margin-left: 15%;
+}
+.foto {
+  width: 50%;
+}
+
+.desc {
+  width: 50%;
+  margin: auto;
+}
+
+.nose {
+  display: flex;
+  flex-direction: column;
+}
+
+p {
+  width: 55%;
+  color: black;
+  line-height: 16px;
+}
+div.nose h1 {
+  font-size: 2rem;
+  color: black;
+  margin-bottom: 80px;
+  margin-top: 15px;
+}
+
+div.nose span {
+  font-weight: 500;
+  font-size: 12px;
+  color: rgb(129, 129, 129);
+}
