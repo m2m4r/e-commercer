@@ -14,10 +14,15 @@ CartItem.init({
         type: S.DataTypes.INTEGER,
         allowNull: false
 
+    },
+    talle: {
+        type: S.DataTypes.DECIMAL,
+        allowNull: true,
     }
+
 },{
     sequelize: db,
-    modelName: "CartItem"
+    modelName: "cartItem"
 })
 
 module.exports = CartItem

@@ -4,25 +4,17 @@ const Inventario = require("./Inventario");
 const CartItem = require("./CartItem");
 const Interaccion = require("./Interacciones");
 
-Productos.hasOne(CartItem, {
-  foreignKey: "product_id",
-});
+Productos.hasOne(CartItem);
 
 CartItem.belongsTo(Productos);
 
-User.hasMany(CartItem, {
-  foreignKey: "user_id_session",
-});
+User.hasMany(CartItem);
 
 CartItem.belongsTo(User);
 
-User.hasOne(Interaccion, {
-  foreignKey: "user_id",
-});
+User.hasOne(Interaccion);
 
-Productos.hasOne(Interaccion, {
-  foreignKey: "product_id",
-});
+Productos.hasOne(Interaccion);
 
 Interaccion.belongsTo(Productos);
 
