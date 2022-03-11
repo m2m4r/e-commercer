@@ -41,6 +41,7 @@ router.post("/productos/:id/actualizar", async (req, res) => {
   res.send("modificado");
 });
 
+// Ingresar o modificar el inventario
 router.post("/productos/:id/stock", async (req, res) => {
   try {
     const [producto, created] = await Inventario.findOrCreate({

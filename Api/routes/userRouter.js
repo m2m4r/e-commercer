@@ -1,5 +1,6 @@
 const express = require("express");
 const { User, Productos, CartItem, Inventario, Interaccion } = require("../models");
+const {Auth} = require("../controllers/middleware/auth")
 
 const router = express.Router();
 const passport = require("passport");
@@ -44,8 +45,19 @@ router.post("/login", passport.authenticate("user"), (req, res) => {
   res.send(req.user);
 });
 
+router.get('/me', Auth, (req, res)=> {
 
-router.post("/:id/addToCart", async (req, res) => {
+  res.send(req.user)
+})
+
+router.post('/logout', (req, res) => {
+  
+  req.logOut()
+  res.sendStatus(200)
+
+})
+
+router.post("/:id/addToCart", Auth, async (req, res) => {
   const producto = await Productos.findByPk(req.params.id,{
     include:{
       model:Inventario,
@@ -72,7 +84,7 @@ router.post("/:id/addToCart", async (req, res) => {
       cantidad: req.body.cantidad,
       costo: costo,
       productoId: req.params.id,
-      userId: req.body.user,
+      userId: req.user.id,
       talle: req.body.talle
     }})
 
@@ -83,17 +95,17 @@ router.post("/:id/addToCart", async (req, res) => {
   
 });
 
-router.get("/:user/carrito", async (req,res) =>{
+router.get("/:user/carrito", Auth, async (req,res) =>{
   const allItems = await CartItem.findAll({
     where:{
-      userId: req.params.user
+      userId: req.user.id
     }
   })
   res.send(allItems)
 
 })
 
-router.put("/:user/carrito/:id", async (req,res) =>{
+router.put("/:user/carrito/:id", Auth, async (req,res) =>{
 
   const producto = await Productos.findByPk(req.params.id,{
     include:{
@@ -110,7 +122,7 @@ router.put("/:user/carrito/:id", async (req,res) =>{
   if(cantidadDisponible >= req.body.cantidad){
     const item = await CartItem.findOne({
     where:{
-      userId: req.params.user,
+      userId: req.user.id,
       productoId: req.params.id,
       talle: req.body.talle
     }
@@ -121,19 +133,13 @@ router.put("/:user/carrito/:id", async (req,res) =>{
   }else{
     res.send("No hay stock suficiente")
   }
-  
-  
-
-
-
-  
 
 })
 
-router.delete("/:user/carrito/:id", async (req,res) =>{
+router.delete("/:user/carrito/:id", Auth, async (req,res) =>{
   await CartItem.destroy({
     where:{
-      userId: req.params.user,
+      userId: req.user.id,
       productoId: req.params.id
     }
   })
@@ -142,17 +148,17 @@ router.delete("/:user/carrito/:id", async (req,res) =>{
 
 })
 
-router.post("/:user/:id/review", async (req, res) => {
+router.post("/:user/:id/review", Auth, async (req, res) => {
 
-  const [interaccion, created] = await Interaccion.findOrCreate({
+    const [interaccion, created] = await Interaccion.findOrCreate({
     where: { 
-      userId: req.params.user ,
+      userId: req.user.id ,
       productoId: req.params.id
     },
     defaults: {
       rating: req.body.rating,
       comentario: req.body.comentario,
-      userId: req.params.user,
+      userId: req.user.id,
       productoId: req.params.id
     }
   })
@@ -162,14 +168,14 @@ router.post("/:user/:id/review", async (req, res) => {
     } else {
       res.send("Ya dejaste una opinión te lo agradecemos tambien.");
     }
-   
+
 })
 
-router.delete("/:user/:id/review", async (req, res) => {
+router.delete("/:user/:id/review", Auth, async (req, res) => {
 
   Interaccion.destroy({
     where: { 
-      userId: req.params.user ,
+      userId: req.user.id ,
       productoId: req.params.id
   }})
   .then(()=>res.send("Eliminaste tu comentario, deja tu opinion cuando quieras."))
