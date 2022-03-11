@@ -3,13 +3,21 @@ import { useEffect } from "react";
 import Navbar from "./componets/Navbar";
 import Register from "./componets/Register";
 import Login from "./componets/Login";
-import { effectLogin } from "./states/usario";
 import Home from "./componets/Home";
+import { useDispatch } from "react-redux";
+import axios from "axios";
+
+import { setUser } from "./states/usario";
 
 /* Renderizado condicional, admin y carrito si no hay un User loggeado */
 
 function App() {
-  useEffect(effectLogin(), []);
+  const dispatch=useDispatch()
+  useEffect(()=>{
+    axios.get("/api/users/me")
+    .then((res)=>dispatch(setUser(res.data)))
+    .catch(err=>console.log(err))
+  }, []);
   return (
     <div className="App">
       <Navbar />

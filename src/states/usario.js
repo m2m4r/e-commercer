@@ -7,17 +7,16 @@ const userReducer = createReducer([], {
 });
 
 export const sendLogin = (email,pass)=> (dispatch)=>{
-  // console.log("funca")
-  // console.log(email)
-  // console.log(pass)
-  return axios.post("/api/users/login", { //consultar ruta al back team
+  console.log("funca")
+  console.log(email)
+  console.log(pass)
+  return axios
+  .post("/api/users/login", {
     email: email.value,
-    password: pass.value
-  }).then((res) =>{ dispatch(setUser(res.data))
-  return res.data})// setear el usuario redux---luego para pedir user en otros comp, usamos useSelector
-}
-export const effectLogin = ()=> (dispatch)=>{
-  return axios.get(`api/me`).then((res) =>{ dispatch(setUser(res.data))
+    contraseña: pass.value
+  }).then((res) =>{ 
+    console.log(res.data)
+    dispatch(setUser(res.data))
   return res.data})// setear el usuario redux---luego para pedir user en otros comp, usamos useSelector
 }
 

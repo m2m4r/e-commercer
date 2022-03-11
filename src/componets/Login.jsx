@@ -1,46 +1,50 @@
 import React from "react";
 import axios from "axios";
+import "../styles/form.css";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
+import { useState } from "react";
+import ErrorMessage from "../commons/ErrorMessage";
 
 import useInput from "../hook/useInput";
 import { setUser, sendLogin } from "../states/usario";
+import SubmitBtn from "../commons/SubmitBtn";
+import Loading from "../commons/Loading";
 
 //importar setUser de redux
 const Login = function () {
   //setUser
+  const [boton , setBoton] = useState(<SubmitBtn clase="button is-success is-fullwidth" valor="Sing In"/>)
+  const [error , setError] = useState(<></>)
   const navigate = useNavigate();
   const email = useInput();
   const pass = useInput();
   const dispatch = useDispatch();
 
-  // const handleLogin = (e) => {
-  //     console.log("hasta acá funciona")
-  //     e.preventDefault();
-  //     axios
-  //         .post("/api/login", { //consultar ruta al back team
-  //         email: email.value,
-  //         password: pass.value
-  //         })
-  //         .then((res) => { dispatch(setUser(res.data))// setear el usuario redux---luego para pedir user en otros comp, usamos useSelector
-  //         navigate("/")}) //definir a donde redirecciona
-  //         .catch(err=>console.log(err))
-  // };
   const handleLogin = (e) => {
     e.preventDefault();
+    setBoton(<Loading clase="button is-primary is-loading is-fullwidth"/>)
     dispatch(sendLogin(email, pass))
       .then((res) => {
         console.log(res);
         navigate("/home");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {console.log(err)
+        setBoton(<SubmitBtn clase="button is-success is-fullwidth" valor="Sing In"/>)
+        setError(<ErrorMessage/>)
+      }
+      );
   };
   const register = () => {
     navigate("/register");
   };
   return (
     <form id="login" class="container" onSubmit={handleLogin}>
-      <h3>Login</h3>
+      <div id="margen" class="field">
+        <p id="borderText" class="control">
+          <a>Login</a>
+        </p>
+      </div>
       <br />
       <div class="field">
         <p class="control has-icons-left has-icons-right">
@@ -66,12 +70,8 @@ const Login = function () {
           </span>
         </p>
       </div>
-      <input
-        id="margen"
-        type="submit"
-        class="button is-success is-fullwidth"
-        value="Sing In"
-      />
+      {boton}
+      {error}
       <div id="margen" class="field">
         <p id="borderText" class="control">
           <a>No estas registrado?</a>
