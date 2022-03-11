@@ -8,15 +8,13 @@ Productos.hasOne(CartItem);
 
 CartItem.belongsTo(Productos);
 
+User.belongsToMany(Productos, { through : Interaccion })
+Productos.belongsToMany(User, { through : Interaccion })
+
 User.hasMany(CartItem);
 
 CartItem.belongsTo(User);
 
-User.hasOne(Interaccion);
-
-Productos.hasOne(Interaccion);
-
-Interaccion.belongsTo(Productos);
 
 Productos.hasMany(Inventario, {foreignKey :"product_id",  onDelete: 'cascade'})
 
