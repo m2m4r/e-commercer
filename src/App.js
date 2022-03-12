@@ -5,17 +5,20 @@ import Register from "./componets/Register";
 import Login from "./componets/Login";
 import Home from "./componets/Home";
 import { useDispatch } from "react-redux";
-import axios from "axios";
 
-import { setUser } from "./states/usario";
+import { effectLogin } from "./states/usario";
+import { effectProducts } from "./states/productos"
 
 /* Renderizado condicional, admin y carrito si no hay un User loggeado */
 
 function App() {
-  const dispatch=useDispatch()
-  useEffect(()=>{
-    axios.get("/api/users/me")
-    .then((res)=>dispatch(setUser(res.data)))
+const dispatch=useDispatch()
+  useEffect(()=>{dispatch(effectLogin())
+    .then((res)=>{console.log(res.data)})
+    .catch(err=>console.log(err))
+  }, []);
+  useEffect(()=>{dispatch(effectProducts())
+    .then((res)=>{console.log(res.data)})
     .catch(err=>console.log(err))
   }, []);
   return (

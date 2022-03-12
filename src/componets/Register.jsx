@@ -151,6 +151,7 @@ const Register = () => {
             className="input"
             type="password"
             placeholder="Password"
+            minlength="8"
           />
           <span className="icon is-small is-left">
             <i className="fas fa-lock"></i>

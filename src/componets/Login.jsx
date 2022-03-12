@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import "../styles/form.css";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
@@ -24,16 +23,14 @@ const Login = function () {
   const handleLogin = (e) => {
     e.preventDefault();
     setBoton(<Loading clase="button is-primary is-loading is-fullwidth"/>)
-    dispatch(sendLogin(email, pass))
+    dispatch(sendLogin([email, pass]))
       .then((res) => {
-        console.log(res);
+        if(res.payload===undefined){
+          setBoton(<SubmitBtn clase="button is-success is-fullwidth" valor="Sing In"/>)
+          setError(<ErrorMessage/>)
+        return};
         navigate("/home");
-      })
-      .catch((err) => {console.log(err)
-        setBoton(<SubmitBtn clase="button is-success is-fullwidth" valor="Sing In"/>)
-        setError(<ErrorMessage/>)
-      }
-      );
+      });
   };
   const register = () => {
     navigate("/register");
