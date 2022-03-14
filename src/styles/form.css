@@ -12,3 +12,17 @@
   justify-content: center;
   display: flex;
 }
+#canvas{
+  max-width: 22em;
+}
+.canvasTitle{
+  font-size: 2em;
+}
+.cartImg{
+  justify-content: flex-start;
+  min-width: 70px;
+  min-height: 70px;
+}
+.cartItem{
+  display: flex;
+}
