@@ -214,6 +214,43 @@ router.get("/category", async (req, res) => {
   }
 });
 
+router.get("/search/producto", async (req, res) => {
+  const query = req.query;
+  const llave = Object.keys(query)[0]
+
+  try {
+    const productos = await Productos.findAll({
+      where: {
+        [S.Op.or] : [
+          { modelo: {
+          [S.Op.iLike]: query[llave] + "%"
+        }},
+        {categorias:{
+          cat:{
+            [S.Op.iLike]: query[llave] + "%"
+          }
+        }},
+        {marca:{
+          [S.Op.iLike]: query[llave] + "%"
+        }}
+        ]
+      },
+      include: [
+        {
+          model: Categoria,
+        },
+        {
+          model: Inventario,
+        }
+      ]
+    });
+
+    res.send(productos);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 
 // CONTINUAR
 
