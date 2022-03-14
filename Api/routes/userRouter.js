@@ -95,7 +95,7 @@ router.post("/:id/addToCart", Auth, async (req, res) => {
   
 });
 
-router.get("/:user/carrito", Auth, async (req,res) =>{
+router.get("/carrito", Auth, async (req,res) =>{
   const allItems = await CartItem.findAll({
     where:{
       userId: req.user.id
@@ -105,7 +105,7 @@ router.get("/:user/carrito", Auth, async (req,res) =>{
 
 })
 
-router.put("/:user/carrito/:id", Auth, async (req,res) =>{
+router.put("/carrito/:id", Auth, async (req,res) =>{
 
   const producto = await Productos.findByPk(req.params.id,{
     include:{
@@ -136,7 +136,7 @@ router.put("/:user/carrito/:id", Auth, async (req,res) =>{
 
 })
 
-router.delete("/:user/carrito/:id", Auth, async (req,res) =>{
+router.delete("/carrito/:id", Auth, async (req,res) =>{
   await CartItem.destroy({
     where:{
       userId: req.user.id,
@@ -148,7 +148,7 @@ router.delete("/:user/carrito/:id", Auth, async (req,res) =>{
 
 })
 
-router.post("/:user/:id/review", Auth, async (req, res) => {
+router.post("/:id/review", Auth, async (req, res) => {
 
     const [interaccion, created] = await Interaccion.findOrCreate({
     where: { 
@@ -171,7 +171,7 @@ router.post("/:user/:id/review", Auth, async (req, res) => {
 
 })
 
-router.delete("/:user/:id/review", Auth, async (req, res) => {
+router.delete("/:id/review", Auth, async (req, res) => {
 
   Interaccion.destroy({
     where: { 
