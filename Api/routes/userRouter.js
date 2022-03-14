@@ -7,9 +7,10 @@ const {
   Interaccion,
   Categoria,
   CatPro,
+  DetalleCompra
 } = require("../models");
 const { Auth } = require("../controllers/middleware/auth");
-
+const S = require("sequelize");
 const router = express.Router();
 const passport = require("passport");
 
@@ -208,25 +209,25 @@ router.get("/category", async (req, res) => {
   }
 });
 
-router.get("/search/producto", async (req, res) => {
-  const query = req.query;
-  try {
-    const productos = await Productos.findAll({
-      where: query,
-      include: [
-        {
-          model: Categoria,
-        },
-        {
-          model: Inventario,
-        },
-      ],
-    });
 
-    res.send(productos);
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
+// CONTINUAR
+
+router.post("/finalizar_compra", async (req, res)=>{
+
+
+
+  await DetalleCompra.create({
+    userId : req.user.id,
+    productos_comprados : req.body.productos_comprados,
+    precio_final : req.body.precio_final,
+    forma_entrega : req.body.forma_entrega,
+    medio_de_pago: req.body.medio_de_pago,
+    datos_contacto : req.body.datos_contacto
+  })
+  
+  res.send()
+})
+
+
 
 module.exports = router;

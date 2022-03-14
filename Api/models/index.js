@@ -4,7 +4,7 @@ const Inventario = require("./Inventario");
 const CartItem = require("./CartItem");
 const Interaccion = require("./Interacciones");
 const {Categoria, CatPro} = require("./Categoria")
-
+const DetalleCompra = require("./DetalleCompra")
 
 
 Productos.hasOne(CartItem);
@@ -21,9 +21,9 @@ Productos.hasMany(Inventario, {foreignKey :"product_id",  onDelete: 'cascade'})
 Categoria.belongsToMany(Productos, {through: CatPro, onDelete: 'cascade'})
 Productos.belongsToMany(Categoria, {through: CatPro, onDelete: 'cascade' ,onUpdate: 'cascade'})
 
+User.hasMany(DetalleCompra);
 
 
 
-
-module.exports = { User, CartItem, Interaccion, Productos, Inventario, Categoria, CatPro };
+module.exports = { User, CartItem, Interaccion, Productos, Inventario, Categoria, CatPro, DetalleCompra };
 
