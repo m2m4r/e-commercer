@@ -7,19 +7,26 @@ import Home from "./componets/Home";
 import { useDispatch } from "react-redux";
 
 import { effectLogin } from "./states/usario";
-import { effectProducts } from "./states/productos"
+import { effectProducts } from "./states/productos";
+import CardDetail from "./commons/CardDetail";
 
 /* Renderizado condicional, admin y carrito si no hay un User loggeado */
 
 function App() {
-const dispatch=useDispatch()
-  useEffect(()=>{dispatch(effectLogin())
-    .then((res)=>{console.log(res.data)})
-    .catch(err=>console.log(err))
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(effectLogin())
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
-  useEffect(()=>{dispatch(effectProducts())
-    .then((res)=>{console.log(res.data)})
-    .catch(err=>console.log(err))
+  useEffect(() => {
+    dispatch(effectProducts())
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
   return (
     <div className="App">
@@ -29,6 +36,7 @@ const dispatch=useDispatch()
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/detail" element={<CardDetail />} />
       </Routes>
 
       {/* <Grid /> EL grid queda aca de prueba hasta que este el home component */}
