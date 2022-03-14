@@ -5,19 +5,30 @@ const {
   Interaccion,
   Productos,
   Inventario,
+  Categoria,
+  CatPro,
 } = require("../models");
 
 const router = express.Router();
 
 router.post("/productos/nuevo", async (req, res) => {
+  let obj = {};
   const producto = await Productos.create({
     modelo: req.body.modelo,
     price: req.body.price,
     marca: req.body.marca,
     /*  image_url: req.body.image,
-      descripcion: req.body.desc ,
-      talles: [{ talle: req.body.talle, stock: req.body.stock }], */
+      descripcion: req.body.desc ,*/},
+      );
+
+  const agregarCategorias = req.body.categorias.map((categoria) => {
+    return {
+      categoriaId: categoria,
+      productoId: producto.id,
+    };
   });
+
+  CatPro.bulkCreate(agregarCategorias);
 
   res.send("creado o modificado");
 });
@@ -32,7 +43,7 @@ router.post("/productos/:id/actualizar", async (req, res) => {
   })
     .then((res) => res.dataValues)
     .then((productos) => {
-      console.log("estos es antes del update", productos);
+     
 
       return Productos.update(req.body, { where: { id: productos.id } });
     })
@@ -70,6 +81,11 @@ router.get("/productos", async (req, res) => {
         {
           model: Inventario,
         },
+        {
+          model: Categoria,
+          attributes: ["cat"]
+
+        },
       ],
     });
     res.send(productos);
@@ -101,24 +117,91 @@ router.get("/productos/:id/stock", async (req, res) => {
   }
 });
 
-
 router.delete("/productos/:id", async (req, res) => {
   try {
-    const productos = await Productos.destroy({where:{id:req.params.id}},{
-      include: [
-        {
-          model: Inventario,
-        },
-      ],
+    const productos = await Productos.destroy(
+      { where: { id: req.params.id } },
+      {
+        include: [
+          {
+            model: Inventario,
+          },
+        ],
+      }
+    );
+    res.send("borrado");
+  } catch (error) {
+    res.send(error);
+  }
+});
+
+router.post("/categorias/agregar", async (req, res) => {
+  try {
+    const [categoria, created] = await Categoria.findOrCreate({
+      where: { cat: req.body.categoria },
+      defaults: {
+        cat: req.body.categoria,
+      },
     });
-   res.send("borrado")
-  } 
-  catch (error) {
+
+    if (created) {
+      res.send("Categoria creada");
+    } else {
+      res.send("No se pudo crear la categorias");
+    }
+  } catch (error) {
+    res.send(error);
+  }
+});
+
+router.get("/categorias", async (req, res) => {
+  try {
+    const categorias = await Categoria.findAll();
+    res.send(categorias);
+  } catch (error) {
     res.send(error);
   }
 });
 
 
+router.delete("/categorias", async (req, res) => {
+  try {
+    const categoria = await Categoria.destroy({where:{
+      cat: req.body.categoria
+    }});
 
+    res.sendStatus(301);
+  } catch (error) {
+    res.send(error);
+  }
+});
+
+router.delete("/categorias", async (req, res) => {
+  try {
+    const categoria = await Categoria.destroy({where:{
+      cat: req.body.categoria
+    }});
+
+    res.sendStatus(301);
+  } catch (error) {
+    res.send(error);
+  }
+});
+
+
+router.put("/categorias", async (req, res) => {
+  try {
+    const categoria = await Categoria.findOne({where:{cat:req.body.categoria}});
+
+    categoria.cat = req.body.newCategoria
+  
+    await categoria.update();
+    await categoria.save();
+
+    res.send(categoria);
+  } catch (error) {
+    res.send(error);
+  }
+});
 
 module.exports = router;

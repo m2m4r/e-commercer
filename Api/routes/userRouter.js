@@ -1,10 +1,17 @@
 const express = require("express");
-const { User, Productos, CartItem, Inventario, Interaccion } = require("../models");
-const {Auth} = require("../controllers/middleware/auth")
+const {
+  User,
+  Productos,
+  CartItem,
+  Inventario,
+  Interaccion,
+  Categoria,
+  CatPro,
+} = require("../models");
+const { Auth } = require("../controllers/middleware/auth");
 
 const router = express.Router();
 const passport = require("passport");
-
 
 router.post("/register", async (req, res, next) => {
   const {
@@ -45,55 +52,56 @@ router.post("/login", passport.authenticate("user"), (req, res) => {
   res.send(req.user);
 });
 
-router.get('/me', Auth, (req, res)=> {
+router.get("/me", Auth, (req, res) => {
+  res.send(req.user);
+});
 
-  res.send(req.user)
-})
-
-router.post('/logout', (req, res) => {
-  
-  req.logOut()
-  res.sendStatus(200)
-
-})
+router.post("/logout", (req, res) => {
+  req.logOut();
+  res.sendStatus(200);
+});
 
 router.post("/:id/addToCart", Auth, async (req, res) => {
-  const producto = await Productos.findByPk(req.params.id,{
-    include:{
-      model:Inventario,
-      where:{
-        talle: req.body.talle
-      }
-    }
-  })
+  const producto = await Productos.findByPk(req.params.id, {
+    include: {
+      model: Inventario,
+      where: {
+        talle: req.body.talle,
+      },
+    },
+  });
 
-  if (!producto) return res.send("No hay stock")
+  if (!producto) return res.send("No hay stock");
 
-  const {inventarios} = producto
-  const cantidadDisponible = inventarios[0].dataValues.stock
+  const { inventarios } = producto;
+  const cantidadDisponible = inventarios[0].dataValues.stock;
 
-  if(cantidadDisponible >= req.body.cantidad){
-    const {price} = producto
-    const costo = price * req.body.cantidad
+  if (cantidadDisponible >= req.body.cantidad) {
+    const { price } = producto;
+    const costo = price * req.body.cantidad;
 
     const respuesta = await CartItem.findOrCreate({
-      where:{
+      where: {
         productoId: req.params.id,
-        talle: req.body.talle
-      },defaults:{
-      cantidad: req.body.cantidad,
-      costo: costo,
-      productoId: req.params.id,
-      userId: req.user.id,
-      talle: req.body.talle
-    }})
+        talle: req.body.talle,
+      },
+      defaults: {
+        cantidad: req.body.cantidad,
+        costo: costo,
+        productoId: req.params.id,
+        userId: req.user.id,
+        talle: req.body.talle,
+      },
+    });
 
-    respuesta[1] ? res.send("Cart Item se añadio correctamente."): res.send("El producto ya fue añadido al carrito.")
-  }else{
-    res.send("No hay stock suficiente.")
+    respuesta[1]
+      ? res.send("Cart Item se añadio correctamente.")
+      : res.send("El producto ya fue añadido al carrito.");
+  } else {
+    res.send("No hay stock suficiente.");
   }
-  
 });
+
 
 router.get("/carrito", Auth, async (req,res) =>{
   const allItems = await CartItem.findAll({
@@ -106,47 +114,47 @@ router.get("/carrito", Auth, async (req,res) =>{
 })
 
 router.put("/carrito/:id", Auth, async (req,res) =>{
+  const producto = await Productos.findByPk(req.params.id, {
+    include: {
+      model: Inventario,
+      where: {
+        talle: req.body.talle,
+      },
+    },
+  });
 
-  const producto = await Productos.findByPk(req.params.id,{
-    include:{
-      model:Inventario,
-      where:{
-        talle: req.body.talle
-      }
-    }
-  })
+  const { inventarios } = producto;
+  const cantidadDisponible = inventarios[0].dataValues.stock;
 
-  const {inventarios} = producto
-  const cantidadDisponible = inventarios[0].dataValues.stock
-
-  if(cantidadDisponible >= req.body.cantidad){
+  if (cantidadDisponible >= req.body.cantidad) {
     const item = await CartItem.findOne({
-    where:{
-      userId: req.user.id,
-      productoId: req.params.id,
-      talle: req.body.talle
-    }
-  })
-  await item.update({cantidad: req.body.cantidad})
-  await item.save()
-  res.sendStatus(200)
-  }else{
-    res.send("No hay stock suficiente")
+      where: {
+        userId: req.user.id,
+        productoId: req.params.id,
+        talle: req.body.talle,
+      },
+    });
+    await item.update({ cantidad: req.body.cantidad });
+    await item.save();
+    res.sendStatus(200);
+  } else {
+    res.send("No hay stock suficiente");
   }
+});
 
-})
+
 
 router.delete("/carrito/:id", Auth, async (req,res) =>{
   await CartItem.destroy({
-    where:{
+    where: {
       userId: req.user.id,
-      productoId: req.params.id
-    }
-  })
+      productoId: req.params.id,
+    },
+  });
 
-  res.send("El producto se elimino del carrito")
+  res.send("El producto se elimino del carrito");
+});
 
-})
 
 router.post("/:id/review", Auth, async (req, res) => {
 
@@ -159,31 +167,66 @@ router.post("/:id/review", Auth, async (req, res) => {
       rating: req.body.rating,
       comentario: req.body.comentario,
       userId: req.user.id,
-      productoId: req.params.id
-    }
-  })
-    
-    if (created) {
-      res.send("Gracias por dejar tu opinión.");
-    } else {
-      res.send("Ya dejaste una opinión te lo agradecemos tambien.");
-    }
+      productoId: req.params.id,
+    },
+  });
 
-})
-
-router.delete("/:id/review", Auth, async (req, res) => {
-
-  Interaccion.destroy({
-    where: { 
-      userId: req.user.id ,
-      productoId: req.params.id
-  }})
-  .then(()=>res.send("Eliminaste tu comentario, deja tu opinion cuando quieras."))
+  if (created) {
+    res.send("Gracias por dejar tu opinión.");
+  } else {
+    res.send("Ya dejaste una opinión te lo agradecemos tambien.");
+  }
+});
   
-   
-})
+router.delete("/:id/review", Auth, async (req, res) => {
+  Interaccion.destroy({
+    where: {
+      userId: req.user.id,
+      productoId: req.params.id,
+    },
+  }).then(() =>
+    res.send("Eliminaste tu comentario, deja tu opinion cuando quieras.")
+  );
+});
 
+router.get("/category", async (req, res) => {
+  try {
+    const productos = await Categoria.findAll({
+      where: {
+        cat: req.query.cat,
+      },
+      include: [
+        {
+          model: Productos,
+        },
+      ],
+    });
+
+    res.send(productos);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+router.get("/search/producto", async (req, res) => {
+  const query = req.query;
+  try {
+    const productos = await Productos.findAll({
+      where: query,
+      include: [
+        {
+          model: Categoria,
+        },
+        {
+          model: Inventario,
+        },
+      ],
+    });
+
+    res.send(productos);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
 
 module.exports = router;
-
-
