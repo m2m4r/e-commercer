@@ -1,24 +1,20 @@
 import axios from "axios";
-import { createReducer, createAction } from "@reduxjs/toolkit";
+import { createReducer , createAsyncThunk} from "@reduxjs/toolkit";
 
-export const setUser = createAction ("SET_USER");
-const userReducer = createReducer([], {
-  [setUser]: (state, action) => action.payload,
+export const sendLogin = createAsyncThunk("LOGIN", (dataUser) => {
+  return axios.post("/api/users/login" , {
+  email: dataUser[0].value,
+  contraseña: dataUser[1].value
+  }).then((res) => res.data);
+});
+export const effectLogin = createAsyncThunk("PERSISTENCIA", () => {
+  return axios.get("/api/users/me").then((res) => res.data);
 });
 
-export const sendLogin = (email,pass)=> (dispatch)=>{
-  // console.log("funca")
-  // console.log(email)
-  // console.log(pass)
-  return axios.post("/api/users/login", { //consultar ruta al back team
-    email: email.value,
-    password: pass.value
-  }).then((res) =>{ dispatch(setUser(res.data))
-  return res.data})// setear el usuario redux---luego para pedir user en otros comp, usamos useSelector
-}
-export const effectLogin = ()=> (dispatch)=>{
-  return axios.get(`api/me`).then((res) =>{ dispatch(setUser(res.data))
-  return res.data})// setear el usuario redux---luego para pedir user en otros comp, usamos useSelector
-}
+const userReducer = createReducer([], {
+  [sendLogin.fulfilled]: (state, action) => action.payload,
+  [effectLogin.fulfilled]: (state, action) => action.payload,
+})
+
 
 export default userReducer;

@@ -3,13 +3,24 @@ import { useEffect } from "react";
 import Navbar from "./componets/Navbar";
 import Register from "./componets/Register";
 import Login from "./componets/Login";
-import { effectLogin } from "./states/usario";
 import Home from "./componets/Home";
+import { useDispatch } from "react-redux";
+
+import { effectLogin } from "./states/usario";
+import { effectProducts } from "./states/productos"
 
 /* Renderizado condicional, admin y carrito si no hay un User loggeado */
 
 function App() {
-  useEffect(effectLogin(), []);
+const dispatch=useDispatch()
+  useEffect(()=>{dispatch(effectLogin())
+    .then((res)=>{console.log(res.data)})
+    .catch(err=>console.log(err))
+  }, []);
+  useEffect(()=>{dispatch(effectProducts())
+    .then((res)=>{console.log(res.data)})
+    .catch(err=>console.log(err))
+  }, []);
   return (
     <div className="App">
       <Navbar />

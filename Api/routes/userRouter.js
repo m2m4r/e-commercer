@@ -102,16 +102,18 @@ router.post("/:id/addToCart", Auth, async (req, res) => {
   }
 });
 
-router.get("/:user/carrito", Auth, async (req, res) => {
-  const allItems = await CartItem.findAll({
-    where: {
-      userId: req.user.id,
-    },
-  });
-  res.send(allItems);
-});
 
-router.put("/:user/carrito/:id", Auth, async (req, res) => {
+router.get("/carrito", Auth, async (req,res) =>{
+  const allItems = await CartItem.findAll({
+    where:{
+      userId: req.user.id
+    }
+  })
+  res.send(allItems)
+
+})
+
+router.put("/carrito/:id", Auth, async (req,res) =>{
   const producto = await Productos.findByPk(req.params.id, {
     include: {
       model: Inventario,
@@ -140,7 +142,9 @@ router.put("/:user/carrito/:id", Auth, async (req, res) => {
   }
 });
 
-router.delete("/:user/carrito/:id", Auth, async (req, res) => {
+
+
+router.delete("/carrito/:id", Auth, async (req,res) =>{
   await CartItem.destroy({
     where: {
       userId: req.user.id,
@@ -151,11 +155,13 @@ router.delete("/:user/carrito/:id", Auth, async (req, res) => {
   res.send("El producto se elimino del carrito");
 });
 
-router.post("/:user/:id/review", Auth, async (req, res) => {
-  const [interaccion, created] = await Interaccion.findOrCreate({
-    where: {
-      userId: req.user.id,
-      productoId: req.params.id,
+
+router.post("/:id/review", Auth, async (req, res) => {
+
+    const [interaccion, created] = await Interaccion.findOrCreate({
+    where: { 
+      userId: req.user.id ,
+      productoId: req.params.id
     },
     defaults: {
       rating: req.body.rating,
@@ -171,8 +177,8 @@ router.post("/:user/:id/review", Auth, async (req, res) => {
     res.send("Ya dejaste una opinión te lo agradecemos tambien.");
   }
 });
-
-router.delete("/:user/:id/review", Auth, async (req, res) => {
+  
+router.delete("/:id/review", Auth, async (req, res) => {
   Interaccion.destroy({
     where: {
       userId: req.user.id,
