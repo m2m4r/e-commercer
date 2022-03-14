@@ -47,6 +47,7 @@ Productos.init({
       type: S.DataTypes.TEXT,
       defaultValue: "descripcion",
     },
+
   },
   {
     // Other model options go here
