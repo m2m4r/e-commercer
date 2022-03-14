@@ -1,7 +1,16 @@
 import useInput from "../hook/useInput";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import "../styles/form.css";
+import { useState } from "react";
+import SubmitBtn from "../commons/SubmitBtn";
+import Loading from "../commons/Loading";
+
+import ErrorMessage from "../commons/ErrorMessage";
+
 const Register = () => {
+  const [boton , setBoton] = useState(<SubmitBtn clase="button is-success is-fullwidth" valor="Sing Up"/>)
+  const [error , setError] = useState(<></>)
   const navigate = useNavigate();
   const firstName = useInput();
   const lastName = useInput();
@@ -13,28 +22,36 @@ const Register = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    let userObject={
+      nombre: firstName.value,
+      apellido: lastName.value,
+      documento: dni.value,
+      usuario: userName.value,
+      email: email.value,
+      telefono: telefono.value,
+      contraseña: pass.value,
+    }
+    setBoton(<Loading clase="button is-primary is-loading is-fullwidth"/>)
     axios
-      .post("/api/users/register", {
-        nombre: firstName.value,
-        apellido: lastName.value,
-        documento: dni.value,
-        usuario: userName.value,
-        email: email.value,
-        telefono: telefono.value,
-        contraseña: pass.value,
-      })
+      .post("/api/users/register", userObject)
       .then((res) => {
         console.log(res);
         navigate("../login", { replace: true });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {console.log(err)
+      setBoton(<SubmitBtn clase="button is-success is-fullwidth" valor="Sing Up"/>)
+      setError(<ErrorMessage/>)});
   };
   const login = () => {
     navigate("/login");
   };
   return (
     <form id="login" className="container" onSubmit={handleSubmit}>
-      <h3>Register</h3>
+      <div id="margen" class="field">
+        <p id="borderText" class="control">
+          <a>Register</a>
+        </p>
+      </div>
       <br />
       <div className="field">
         <p className="control has-icons-left has-icons-right">
@@ -134,18 +151,15 @@ const Register = () => {
             className="input"
             type="password"
             placeholder="Password"
+            minlength="8"
           />
           <span className="icon is-small is-left">
             <i className="fas fa-lock"></i>
           </span>
         </p>
       </div>
-      <input
-        id="margen"
-        type="submit"
-        className="button is-success is-fullwidth"
-        value="Sing Up"
-      />
+      {boton}
+      {error}
       <div id="margen" className="field">
         <p id="borderText" className="control">
           <a>Tenés una cuenta?</a>

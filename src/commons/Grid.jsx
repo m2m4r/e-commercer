@@ -1,7 +1,10 @@
 import Card from "./Card";
 import "../styles/grid.css";
+import { useSelector } from "react-redux";
 
 const Grid = () => {
+  const productos = useSelector((state)=> state.productos); //Esto es lo que se tiene que usar
+  console.log(productos)
   const products = [
     {
       img: "https://cdn.flightclub.com/2200/TEMPLATE/280979/1.jpg",
@@ -73,7 +76,7 @@ const Grid = () => {
       <div className="contenedor">
         <h1 className="is-size-3 has-text-centered">NEW RELEASES</h1>
         <ul className="grid ">
-          {products.map((p, i) => (
+          {products && products.map((p, i) => (
             <Card product={p} key={i} />
           ))}
         </ul>

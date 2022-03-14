@@ -79,7 +79,7 @@ app.get("/", function (req, res, next) {
 const PORT = process.env.PORT || 3001;
 
 db.sync({ force: false}).then(() => {
-  app.listen(PORT, () => {
+  app.listen(3001, () => {
     console.log("Escuchando en el puerto ", PORT);
   });
 });
