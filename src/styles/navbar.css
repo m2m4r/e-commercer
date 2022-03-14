@@ -1,5 +1,5 @@
 #Navbar {
-  background-color: transparent;
+  background-color: black;
   position: absolute;
   width: 100%;
   position: fixed;
@@ -7,14 +7,14 @@
 }
 
 .navbar-item {
-  background-color: transparent;
+  background-color: black;
 }
 .navbar-menu {
-  background-color: transparent;
+  background-color: black;
 }
 #Search {
   width: 280px;
-  background-color: transparent;
+  background-color: black;
   margin-left: 5%;
   margin-top: 5%;
   margin-bottom: auto;
@@ -40,15 +40,15 @@
 }
 
 #botonRegistro {
-  background-color: transparent;
+  background-color: black;
 }
 #botonLogin {
-  background-color: transparent;
+  background-color: black;
   color: white;
 }
 
 #botonCarrito {
-  background-color: transparent;
+  background-color: black;
   border: 2px solid white;
   color: white;
 }

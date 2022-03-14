@@ -1,9 +1,19 @@
 import "../styles/card.css";
+import { ProductContext } from "../context/product";
+import { useContext } from "react";
+import { useNavigate } from "react-router";
+
 const Card = (product) => {
+  const { producto, setProducto } = useContext(ProductContext);
+  const navigate = useNavigate();
+  const productClick = () => {
+    setProducto(product.product);
+    navigate("/detail");
+  };
   return (
-    <li className="card">
+    <li className="card" onClick={productClick}>
       <img
-        src={product.product.img}
+        src={product.product.image_url[0]}
         alt={product.product.model}
         className="cardImage"
         width={270}
@@ -11,7 +21,7 @@ const Card = (product) => {
       />
       <p>{product.product.marca}</p>
 
-      <h3>{product.product.model}</h3>
+      <h3>{product.product.modelo}</h3>
     </li>
   );
 };
