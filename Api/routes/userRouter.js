@@ -52,6 +52,11 @@ router.post("/login", passport.authenticate("user"), (req, res) => {
   res.send(req.user);
 });
 
+router.put("/edit", Auth, async (req, res) => {
+  const usuarioActualizado = await User.update(req.body, { where: {id: req.user.id}, individualHooks: true})
+  res.status(201).send(usuarioActualizado);
+});
+
 router.get("/me", Auth, (req, res) => {
   res.send(req.user);
 });
