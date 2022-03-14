@@ -9,7 +9,28 @@ const {
   CatPro,
 } = require("../models");
 
+const { AuthAdmin } = require("../controllers/middleware/auth");
+
 const router = express.Router();
+
+router.put('/usuario/:id', async (req, res) => {
+  await User.update({ permiso: 'admin' }, { where: { id: req.params.id } })
+  res.status(201).send('Usuario promovido a administrador.')
+})
+
+router.delete('/usuario/:id', async (req, res) => {
+  try {
+    await User.destroy({ where: { id: req.params.id } });
+    res.send("Usuario eliminado");
+  } catch (error) {
+    res.send(error);
+  }
+})
+
+router.get("/usuarios", async (req, res) => {
+  const usuarios = await User.findAll()
+  res.send(usuarios);
+})
 
 router.post("/productos/nuevo", async (req, res) => {
   let obj = {};
@@ -160,19 +181,6 @@ router.get("/categorias", async (req, res) => {
   }
 });
 
-router.delete("/categorias", async (req, res) => {
-  try {
-    const categoria = await Categoria.destroy({
-      where: {
-        cat: req.body.categoria,
-      },
-    });
-
-    res.sendStatus(301);
-  } catch (error) {
-    res.send(error);
-  }
-});
 
 router.delete("/categorias", async (req, res) => {
   try {

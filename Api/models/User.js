@@ -87,4 +87,15 @@ User.addHook('beforeCreate',(user)=>{
     .then(hashedPassword => user.contraseña = hashedPassword)
 })
 
+User.addHook('beforeUpdate',(user)=>{
+    console.log('ENTRE---------------')
+    return bcrypt.genSalt(16)
+    .then(salt => {
+        user.salt = salt
+        return user.setHash(user.contraseña, user.salt)
+    })
+    .then(hashedPassword => user.contraseña = hashedPassword)
+})
+
+
 module.exports = User
