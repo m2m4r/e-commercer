@@ -1,5 +1,6 @@
 // Configuración del server
-
+const dotenv = require("dotenv");
+dotenv.config();
 const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
@@ -58,7 +59,6 @@ passport.use(
 );
 
 passport.serializeUser(function (user, done) {
-  console.log("serialeze------>", user);
   done(null, user.id);
 });
 

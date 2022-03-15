@@ -13,6 +13,7 @@ const { Auth } = require("../controllers/middleware/auth");
 const S = require("sequelize");
 const router = express.Router();
 const passport = require("passport");
+const nodemailer = require("nodemailer");
 
 router.post("/register", async (req, res, next) => {
   const {
@@ -174,21 +175,37 @@ router.put("/carrito/:id", Auth, async (req, res) => {
     });
     await item.update({ cantidad: req.body.cantidad });
     await item.save();
-    res.sendStatus(200);
+    
+    const allItems = await CartItem.findAll({
+      where:{
+        userId: req.user.id
+      }
+    })
+    res.send(allItems)
+    
   } else {
     res.send("No hay stock suficiente");
   }
 });
 
+
 router.delete("/carrito/:id", Auth, async (req, res) => {
+
   await CartItem.destroy({
     where: {
       userId: req.user.id,
-      productoId: req.params.id,
+      id: req.params.id,
     },
   });
 
-  res.send("El producto se elimino del carrito");
+  const allItems = await CartItem.findAll({
+    where:{
+      userId: req.user.id
+    }
+  })
+  res.send(allItems)
+
+  // res.send("El producto se elimino del carrito");
 });
 
 router.post("/:id/review", Auth, async (req, res) => {
@@ -288,6 +305,99 @@ router.get("/search/producto", async (req, res) => {
   }
 });
 
+router.post("/finalizar_compra", Auth, async (req, res)=>{
+  console.log(process.env.MAIL)
+
+  const userAuth = process.env.MAIL;
+  const passAuth = process.env.CONTRASEÑA;
+
+
+  const Transporter = await nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+       auth: {
+           user: userAuth,
+           pass: passAuth
+       }
+  })
+
+  const compraUsuario = await DetalleCompra.create({
+    userId : req.user.id,
+    productos_comprados : req.body.productos_comprados,
+    precio_final : req.body.precio_final,
+    forma_entrega : req.body.forma_entrega,
+    medio_de_pago: req.body.medio_de_pago,
+    datos_contacto : req.body.datos_contacto
+  })
+
+  await Transporter.sendMail({
+    from: `"Compra registrada!" <${process.env.MAIL}>`, // sender address
+    to: req.user.email, // list of receivers
+    subject: "Compra registrada! ✔", // Subject line
+    html: `
+    <b> Tu compra fue realizada con éxito, a continuación te brindamos un detalle de la misma!
+    Mediante el número de seguimiento podrás consultar el estado de tu compra.
+    Muchas gracias por comprar en Plataforma Sneakers.</b>
+    <table>
+      <caption><strong>Tu compra:</strong></caption>
+      <tbody>
+        <tr>
+          <td>Número de seguimiento:</td>
+          <td>${compraUsuario.dataValues.id}</td>
+        </tr>
+        <tr>
+          <td>Resumen compra:</td>
+        </tr>
+        ${compraUsuario.dataValues.productos_comprados.map(producto =>{
+              return(
+                `
+                <tr>    
+                  <td>Modelo:</td>
+                  <td>${producto.modelo}</td>
+                </tr>
+                `
+            )
+          })}
+        <tr>
+          <td>Costo Total:</td>
+          <td>$${compraUsuario.dataValues.precio_final}</td>
+        </tr>
+        <tr>
+        <td>Estado de la compra:</td>
+        <td>${compraUsuario.dataValues.estado_compra}. Te enviaremos un mail cuando hayamos procesado tu pago.</td>
+      </tr>
+      </tbody>
+    </table>
+    `, // html body
+  });
+
+  CartItem.destroy({
+    where:{
+      userId: req.user.id
+    }
+  })
+
+  res.send("Tu compra fue realizada con éxito, recibiras un email con información detallada al respecto.")
+})
+
+
+router.get("/detalleCompras", Auth, async (req, res) =>{
+
+  try {
+    const historial = await DetalleCompra.findAll({
+      where: {
+        userId: req.user.id
+      }
+    });
+
+    res.send(historial);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+
+})
+
 router.get("/productos/pages/:page", async (req, res) => {
   
 
@@ -305,21 +415,6 @@ router.get("/productos/pages/:page", async (req, res) => {
   } catch (error) {
     res.send(error);
   }
-});
-
-// CONTINUAR
-
-router.post("/finalizar_compra", async (req, res) => {
-  await DetalleCompra.create({
-    userId: req.user.id,
-    productos_comprados: req.body.productos_comprados,
-    precio_final: req.body.precio_final,
-    forma_entrega: req.body.forma_entrega,
-    medio_de_pago: req.body.medio_de_pago,
-    datos_contacto: req.body.datos_contacto,
-  });
-
-  res.send();
 });
 
 module.exports = router;

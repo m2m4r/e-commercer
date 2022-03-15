@@ -18,7 +18,7 @@ DetalleCompra.init({
     estado_compra:{
         type: S.DataTypes.STRING,
         allowNull: false,
-        defaultValue: "Comprado"
+        defaultValue: "Pendiente"
     },
     forma_entrega:{
         type: S.DataTypes.STRING,
