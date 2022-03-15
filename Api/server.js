@@ -8,6 +8,7 @@ const cors = require("cors");
 const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
+var GoogleStrategy = require('passport-google-oidc');
 
 const routes = require("./routes");
 const db = require("./db/index");
@@ -69,6 +70,14 @@ passport.deserializeUser(function (id, done) {
     })
     .catch(done);
 });
+
+
+
+
+
+
+
+
 
 app.use("/api", routes);
 

@@ -7,7 +7,7 @@ const {
   Interaccion,
   Categoria,
   CatPro,
-  DetalleCompra
+  DetalleCompra,
 } = require("../models");
 const { Auth } = require("../controllers/middleware/auth");
 const S = require("sequelize");
@@ -55,7 +55,10 @@ router.post("/login", passport.authenticate("user"), (req, res) => {
 });
 
 router.put("/edit", Auth, async (req, res) => {
-  const usuarioActualizado = await User.update(req.body, { where: {id: req.user.id}, individualHooks: true})
+  const usuarioActualizado = await User.update(req.body, {
+    where: { id: req.user.id },
+    individualHooks: true,
+  });
   res.status(201).send(usuarioActualizado);
 });
 
@@ -68,6 +71,37 @@ router.post("/logout", (req, res) => {
   res.sendStatus(200);
 });
 
+router.get("/productos/:id", async (req, res) => {
+  try {
+    const producto = await Productos.findOne({where: { id: req.params.id }})
+    res.send(producto);
+  }
+  catch {
+    res.sendStatus(404);
+  }
+})
+
+router.get("/productos", async (req, res) => {
+  try {
+    const productos = await Productos.findAll({
+      include: [
+        {
+          model: Inventario,
+        },
+        {
+          model: Categoria,
+          through:{
+            attributes: ["cat"],
+          }
+        },
+      ],
+    });
+    res.send(productos);
+  } catch (error) {
+    res.send(error);
+  }
+});
+
 router.post("/:id/addToCart", Auth, async (req, res) => {
   const producto = await Productos.findByPk(req.params.id, {
     include: {
@@ -77,7 +111,7 @@ router.post("/:id/addToCart", Auth, async (req, res) => {
       },
     },
   });
-
+  console.log("productoooooo",producto)
   if (!producto) return res.send("No hay stock");
 
   const { inventarios } = producto;
@@ -109,18 +143,16 @@ router.post("/:id/addToCart", Auth, async (req, res) => {
   }
 });
 
-
-router.get("/carrito", Auth, async (req,res) =>{
+router.get("/carrito", Auth, async (req, res) => {
   const allItems = await CartItem.findAll({
-    where:{
-      userId: req.user.id
-    }
-  })
-  res.send(allItems)
+    where: {
+      userId: req.user.id,
+    },
+  });
+  res.send(allItems);
+});
 
-})
-
-router.put("/carrito/:id", Auth, async (req,res) =>{
+router.put("/carrito/:id", Auth, async (req, res) => {
   const producto = await Productos.findByPk(req.params.id, {
     include: {
       model: Inventario,
@@ -156,7 +188,9 @@ router.put("/carrito/:id", Auth, async (req,res) =>{
   }
 });
 
-router.delete("/carrito/:id", Auth, async (req,res) =>{
+
+router.delete("/carrito/:id", Auth, async (req, res) => {
+
   await CartItem.destroy({
     where: {
       userId: req.user.id,
@@ -174,13 +208,11 @@ router.delete("/carrito/:id", Auth, async (req,res) =>{
   // res.send("El producto se elimino del carrito");
 });
 
-
 router.post("/:id/review", Auth, async (req, res) => {
-
-    const [interaccion, created] = await Interaccion.findOrCreate({
-    where: { 
-      userId: req.user.id ,
-      productoId: req.params.id
+  const [interaccion, created] = await Interaccion.findOrCreate({
+    where: {
+      userId: req.user.id,
+      productoId: req.params.id,
     },
     defaults: {
       rating: req.body.rating,
@@ -196,7 +228,7 @@ router.post("/:id/review", Auth, async (req, res) => {
     res.send("Ya dejaste una opinión te lo agradecemos tambien.");
   }
 });
-  
+
 router.delete("/:id/review", Auth, async (req, res) => {
   Interaccion.destroy({
     where: {
@@ -229,33 +261,42 @@ router.get("/category", async (req, res) => {
 
 router.get("/search/producto", async (req, res) => {
   const query = req.query;
-  const llave = Object.keys(query)[0]
+  let llave = Object.keys(query)[0];
+  llave= llave.toLowerCase()
+  console.log(`${query[llave]}%`);
+
 
   try {
     const productos = await Productos.findAll({
-      where: {
-        [S.Op.or] : [
-          { modelo: {
-          [S.Op.iLike]: query[llave] + "%"
-        }},
-        {categorias:{
-          cat:{
-            [S.Op.iLike]: query[llave] + "%"
-          }
-        }},
-        {marca:{
-          [S.Op.iLike]: query[llave] + "%"
-        }}
-        ]
-      },
       include: [
         {
           model: Categoria,
+          as: 'categorias',
         },
         {
           model: Inventario,
         }
-      ]
+       ],
+        where: {
+          [S.Op.or]: [
+            /* {
+              modelo: { 
+                [S.Op.iLike]:"%"+query[llave]+"%",
+              },
+            },
+            {
+              marca: {
+                [S.Op.iLike]: "%"+query[llave]+"%",
+              },
+            }, */
+           /*  {
+              '$categorias.Categoria.cat$': {
+                [S.Op.iLike]: "%"+query[llave]+"%",
+              },
+            }, */
+                 
+          ],
+        }, 
     });
 
     res.send(productos);
@@ -357,6 +398,23 @@ router.get("/detalleCompras", Auth, async (req, res) =>{
 
 })
 
+router.get("/productos/pages/:page", async (req, res) => {
+  
 
+  try {
+    const page= (req.params.page==="1") ? 0 : (Number(req.params.page)-1) * 12
+      const productos = await Productos.findAll(
+        {
+         include:[{model:Categoria},{model:Inventario}] ,
+         offset: page,
+         limit:12
+        }
+        
+      );
+    res.send(productos);
+  } catch (error) {
+    res.send(error);
+  }
+});
 
 module.exports = router;

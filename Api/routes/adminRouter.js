@@ -16,11 +16,19 @@ const { AuthAdmin } = require("../controllers/middleware/auth");
 
 const router = express.Router();
 
-router.put('/usuario/:id', async (req, res) => {
+// falta el Auth de Admin
+router.put('/darAdmin/:id', async (req, res) => {
   await User.update({ permiso: 'admin' }, { where: { id: req.params.id } })
   res.status(201).send('Usuario promovido a administrador.')
 })
 
+// falta el Auth de Admin
+router.put('/sacarAdmin/:id', async (req, res) => {
+  await User.update({ permiso: 'user' }, { where: { id: req.params.id } })
+  res.status(201).send('Usuario revocado del permiso a administrador.')
+})
+
+// falta el Auth de Admin
 router.delete('/usuario/:id', async (req, res) => {
   try {
     await User.destroy({ where: { id: req.params.id } });
@@ -30,6 +38,7 @@ router.delete('/usuario/:id', async (req, res) => {
   }
 })
 
+// falta el Auth de Admin
 router.get("/usuarios", async (req, res) => {
   const usuarios = await User.findAll()
   res.send(usuarios);
@@ -102,12 +111,15 @@ router.get("/productos", async (req, res) => {
       include: [
         {
           model: Inventario,
+
         },
         {
           model: Categoria,
           attributes: ["cat"],
         },
       ],
+      order: [
+        [Inventario, 'talle', 'ASC']]
     });
     res.send(productos);
   } catch (error) {
@@ -123,14 +135,17 @@ router.get("/productos/:id/stock", async (req, res) => {
           product_id: req.params.id,
         },
       },
-
       {
         include: [
           {
             model: Inventario,
           },
         ],
-      }
+        order: [
+          [Inventario, 'talle', 'ASC']]
+      },
+
+      
     );
     res.send(productos);
   } catch (error) {
@@ -156,6 +171,7 @@ router.delete("/productos/:id", async (req, res) => {
   }
 });
 
+// falta el Auth de Admin
 router.post("/categorias/agregar", async (req, res) => {
   try {
     const [categoria, created] = await Categoria.findOrCreate({
@@ -175,6 +191,7 @@ router.post("/categorias/agregar", async (req, res) => {
   }
 });
 
+// falta el Auth de Admin
 router.get("/categorias", async (req, res) => {
   try {
     const categorias = await Categoria.findAll();
@@ -184,7 +201,7 @@ router.get("/categorias", async (req, res) => {
   }
 });
 
-
+// falta el Auth de Admin
 router.delete("/categorias", async (req, res) => {
   try {
     const categoria = await Categoria.destroy({
@@ -199,6 +216,7 @@ router.delete("/categorias", async (req, res) => {
   }
 });
 
+// falta el Auth de Admin
 router.put("/categorias", async (req, res) => {
   try {
     const categoria = await Categoria.findOne({
