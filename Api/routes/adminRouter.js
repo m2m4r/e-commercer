@@ -7,7 +7,10 @@ const {
   Inventario,
   Categoria,
   CatPro,
+  DetalleCompra
 } = require("../models");
+
+const nodemailer = require("nodemailer");
 
 const { AuthAdmin } = require("../controllers/middleware/auth");
 
@@ -212,5 +215,53 @@ router.put("/categorias", async (req, res) => {
     res.send(error);
   }
 });
+
+
+router.get("/ordenesDeCompra", (req, res)=>{
+  DetalleCompra.findAll()
+  .then(todos => res.send(todos))
+
+})
+
+router.get("/ordenesDeCompraPendientes", (req, res)=>{
+  DetalleCompra.findAll({
+    where:{
+      estado_compra:"pendiente"
+    }
+  })
+  .then(todos => res.send(todos))
+
+})
+
+
+router.put("/ordenesDeCompraPendientes/:id", async (req, res)=>{
+  let compra = await DetalleCompra.findByPk(req.params.id)
+  await compra.update({estado_compra:req.body.nuevo_estado})
+  await compra.save()
+
+  const Transporter = await nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+       auth: {
+           user: "plataformasneakers@gmail.com",
+           pass: "mikzmknpflldwbae"
+       }
+  })
+
+  await Transporter.sendMail({
+    from: `"Tu compra fue ${req.body.nuevo_estado}!" <plataformasneakers@gmail.com>`,
+    to: compra.datos_contacto.email,
+    subject: `Tu compra fue ${req.body.nuevo_estado}!`,
+    html: (req.body.nuevo_estado === "aceptada")?(
+        '<b>Se procesó tu pago correctamente.</b>'
+      ):(
+        "<b>Tu pago fue rechazado.</b>"
+      )
+  })
+
+  res.send("Cambio en el estado efectuado correctamente")
+
+})
 
 module.exports = router;
