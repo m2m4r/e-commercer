@@ -12,15 +12,17 @@ export const addCartItem = createAsyncThunk("AGREGAR_A_CARRITO",(product_Id , ca
   }).then(res=>res.data)
 })
 
-export const updateCartItem = createAsyncThunk("ACTUALIZAR_CARRITO",(product_Id , cantidad, talle)=>{ 
-  return axios.put(`/api/users/carrito/${product_Id}`,{
-    cantidad: cantidad,
-    talle: talle
+export const updateCartItem = createAsyncThunk("ACTUALIZAR_CARRITO",(array)=>{ 
+  return axios.put(`/api/users/carrito/${array[0]}`,{
+    cantidad: array[1],
+    talle: array[2]
   }).then(res=>res.data)
 })
 
 export const deleteCartItem = createAsyncThunk("ELIMINAR_DE_CARRITO",(product_Id)=>{ 
+  console.log("chuparle la vulva a tefi",product_Id)
   axios.delete(`/api/users/carrito/${product_Id}`).then(res=>console.log(res.data))
+  .then(res=>res.data)
 })
 
 const cartReducer = createReducer([], {
