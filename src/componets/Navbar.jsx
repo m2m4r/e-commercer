@@ -76,12 +76,12 @@ export class Navbar extends Component {
                     <img src={logoCarrito} alt="logo" />
                   </span>
                 </button>
-                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
-                <div class="offcanvas-header">
+                <div className="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+                <div className="offcanvas-header">
                   <h2 id="offcanvasRightLabel" className="canvasTitle">Tu carrito de compras.</h2>
-                  <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                  <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
-                <div class="offcanvas-body">
+                <div className="offcanvas-body">
                   <Carrito/>
                 </div>
               </div>

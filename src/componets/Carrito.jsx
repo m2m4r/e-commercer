@@ -2,22 +2,18 @@ import { useSelector } from "react-redux";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "../styles/form.css";
 import CartItem from "../commons/CartItem";
+import { cart } from "../states/cart";
 
 
-const Carrito =()=>{
-    const cartItems= useSelector((state)=> state.cart)
+const Carrito =function(){
+  const cartItems=useSelector((state)=>state.cart)
     return(<>
-      <div id="canvas" class="columns">
-        <div class="column is-three-fifths">Producto</div>
-        <div class="column">Cantidad</div>
-        <div class="column">Subtotal</div>
+      {cartItems && cartItems.map((item)=>(<CartItem producto={item}/>))}
+      <div className="columns container">
+        <div id="totalTitle" className="column is-three-fifths">Total de compra</div>
+        <div id="totalMonto" className="column">{`$ ${!cartItems[0]?0:cartItems.map((Obj)=>Obj.cantidad * Obj.costo).reduce((accumulator, curr) => accumulator + curr)}`}</div>
       </div>
-      <div class="card">
-        <div class="card-body cartItem">
-        <img src="https://rebajasok.com/6211-large_default/zapatilla-gummi-aired.jpg" class="img-thumbnail cartImg" alt="..."/>
-        <h3>This is some text within a card body.</h3>
-       </div>
-      </div>
+      {cartItems[0]?<button class="button is-primary is-fullwidth">Finalizar tu compra</button>:<></>}
     </>
     )
 }

@@ -10,6 +10,7 @@ import { effectLogin } from "./states/usario";
 import CardDetail from "./commons/CardDetail";
 import { effectProducts } from "./states/productos"
 import { cart } from "./states/cart"
+import { useSelector } from "react-redux";
 
 
 /* Renderizado condicional, admin y carrito si no hay un User loggeado */
@@ -21,6 +22,7 @@ const dispatch=useDispatch()
     .then((res)=>{console.log("1",res)})
     .catch(err=>console.log(err))
   }, []);
+  const usuario  = useSelector((state)=>state.user)
   useEffect(()=>{dispatch(effectProducts())
     .then((res)=>{console.log("2",res)})
     .catch(err=>console.log(err))
@@ -28,7 +30,7 @@ const dispatch=useDispatch()
   useEffect(()=>{dispatch(cart())
     .then((res)=>{console.log("3",res)})
     .catch(err=>console.log(err))
-  }, [])
+  }, [usuario])
   return (
     <div className="App">
       <Navbar />

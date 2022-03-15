@@ -19,10 +19,29 @@
   font-size: 2em;
 }
 .cartImg{
-  justify-content: flex-start;
-  min-width: 70px;
-  min-height: 70px;
+  min-width: 5.5em;
+  min-height: 5.5em;
 }
-.cartItem{
+.itemTitle{
+  font-size: 0.9em;
+  margin-bottom: 2em;
+}
+.colFlex{
   display: flex;
+  flex-direction: column;
+}
+#colItem{
+  max-width: 3em;
+}
+.subTotal{
+  font-size: 10px;
+}
+#itemContent{
+  padding-bottom: 3em;
+}
+#totalTitle{
+  font-size: 1.4em;
+}
+#totalMonto{
+  font-size: 1.8em;
 }

@@ -20,7 +20,7 @@ export const updateCartItem = createAsyncThunk("ACTUALIZAR_CARRITO",(product_Id 
 })
 
 export const deleteCartItem = createAsyncThunk("ELIMINAR_DE_CARRITO",(product_Id)=>{ 
-  return axios.delete(`/api/users/carrito/${product_Id}`).then(res=>res.data)
+  axios.delete(`/api/users/carrito/${product_Id}`).then(res=>console.log(res.data))
 })
 
 const cartReducer = createReducer([], {
