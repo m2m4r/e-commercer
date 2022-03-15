@@ -67,6 +67,37 @@ router.post("/logout", (req, res) => {
   res.sendStatus(200);
 });
 
+router.get("/productos/:id", async (req, res) => {
+  try {
+    const producto = await Productos.findOne({where: { id: req.params.id }})
+    res.send(producto);
+  }
+  catch {
+    res.sendStatus(404);
+  }
+})
+
+router.get("/productos", async (req, res) => {
+  try {
+    const productos = await Productos.findAll({
+      include: [
+        {
+          model: Inventario,
+        },
+        {
+          model: Categoria,
+          through:{
+            attributes: ["cat"],
+          }
+        },
+      ],
+    });
+    res.send(productos);
+  } catch (error) {
+    res.send(error);
+  }
+});
+
 router.post("/:id/addToCart", Auth, async (req, res) => {
   const producto = await Productos.findByPk(req.params.id, {
     include: {
