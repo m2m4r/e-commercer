@@ -108,12 +108,15 @@ router.get("/productos", async (req, res) => {
       include: [
         {
           model: Inventario,
+
         },
         {
           model: Categoria,
           attributes: ["cat"],
         },
       ],
+      order: [
+        [Inventario, 'talle', 'ASC']]
     });
     res.send(productos);
   } catch (error) {
@@ -129,14 +132,17 @@ router.get("/productos/:id/stock", async (req, res) => {
           product_id: req.params.id,
         },
       },
-
       {
         include: [
           {
             model: Inventario,
           },
         ],
-      }
+        order: [
+          [Inventario, 'talle', 'ASC']]
+      },
+
+      
     );
     res.send(productos);
   } catch (error) {

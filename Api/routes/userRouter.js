@@ -7,7 +7,7 @@ const {
   Interaccion,
   Categoria,
   CatPro,
-  DetalleCompra
+  DetalleCompra,
 } = require("../models");
 const { Auth } = require("../controllers/middleware/auth");
 const S = require("sequelize");
@@ -54,7 +54,10 @@ router.post("/login", passport.authenticate("user"), (req, res) => {
 });
 
 router.put("/edit", Auth, async (req, res) => {
-  const usuarioActualizado = await User.update(req.body, { where: {id: req.user.id}, individualHooks: true})
+  const usuarioActualizado = await User.update(req.body, {
+    where: { id: req.user.id },
+    individualHooks: true,
+  });
   res.status(201).send(usuarioActualizado);
 });
 
@@ -139,18 +142,16 @@ router.post("/:id/addToCart", Auth, async (req, res) => {
   }
 });
 
-
-router.get("/carrito", Auth, async (req,res) =>{
+router.get("/carrito", Auth, async (req, res) => {
   const allItems = await CartItem.findAll({
-    where:{
-      userId: req.user.id
-    }
-  })
-  res.send(allItems)
+    where: {
+      userId: req.user.id,
+    },
+  });
+  res.send(allItems);
+});
 
-})
-
-router.put("/carrito/:id", Auth, async (req,res) =>{
+router.put("/carrito/:id", Auth, async (req, res) => {
   const producto = await Productos.findByPk(req.params.id, {
     include: {
       model: Inventario,
@@ -179,9 +180,7 @@ router.put("/carrito/:id", Auth, async (req,res) =>{
   }
 });
 
-
-
-router.delete("/carrito/:id", Auth, async (req,res) =>{
+router.delete("/carrito/:id", Auth, async (req, res) => {
   await CartItem.destroy({
     where: {
       userId: req.user.id,
@@ -192,13 +191,11 @@ router.delete("/carrito/:id", Auth, async (req,res) =>{
   res.send("El producto se elimino del carrito");
 });
 
-
 router.post("/:id/review", Auth, async (req, res) => {
-
-    const [interaccion, created] = await Interaccion.findOrCreate({
-    where: { 
-      userId: req.user.id ,
-      productoId: req.params.id
+  const [interaccion, created] = await Interaccion.findOrCreate({
+    where: {
+      userId: req.user.id,
+      productoId: req.params.id,
     },
     defaults: {
       rating: req.body.rating,
@@ -214,7 +211,7 @@ router.post("/:id/review", Auth, async (req, res) => {
     res.send("Ya dejaste una opinión te lo agradecemos tambien.");
   }
 });
-  
+
 router.delete("/:id/review", Auth, async (req, res) => {
   Interaccion.destroy({
     where: {
@@ -247,33 +244,42 @@ router.get("/category", async (req, res) => {
 
 router.get("/search/producto", async (req, res) => {
   const query = req.query;
-  const llave = Object.keys(query)[0]
+  let llave = Object.keys(query)[0];
+  llave= llave.toLowerCase()
+  console.log(`${query[llave]}%`);
+
 
   try {
     const productos = await Productos.findAll({
-      where: {
-        [S.Op.or] : [
-          { modelo: {
-          [S.Op.iLike]: query[llave] + "%"
-        }},
-        {categorias:{
-          cat:{
-            [S.Op.iLike]: query[llave] + "%"
-          }
-        }},
-        {marca:{
-          [S.Op.iLike]: query[llave] + "%"
-        }}
-        ]
-      },
       include: [
         {
           model: Categoria,
+          as: 'categorias',
         },
         {
           model: Inventario,
         }
-      ]
+       ],
+        where: {
+          [S.Op.or]: [
+            /* {
+              modelo: { 
+                [S.Op.iLike]:"%"+query[llave]+"%",
+              },
+            },
+            {
+              marca: {
+                [S.Op.iLike]: "%"+query[llave]+"%",
+              },
+            }, */
+           /*  {
+              '$categorias.Categoria.cat$': {
+                [S.Op.iLike]: "%"+query[llave]+"%",
+              },
+            }, */
+                 
+          ],
+        }, 
     });
 
     res.send(productos);
@@ -282,25 +288,38 @@ router.get("/search/producto", async (req, res) => {
   }
 });
 
+router.get("/productos/pages/:page", async (req, res) => {
+  
+
+  try {
+    const page= (req.params.page==="1") ? 0 : (Number(req.params.page)-1) * 12
+      const productos = await Productos.findAll(
+        {
+         include:[{model:Categoria},{model:Inventario}] ,
+         offset: page,
+         limit:12
+        }
+        
+      );
+    res.send(productos);
+  } catch (error) {
+    res.send(error);
+  }
+});
 
 // CONTINUAR
 
-router.post("/finalizar_compra", async (req, res)=>{
-
-
-
+router.post("/finalizar_compra", async (req, res) => {
   await DetalleCompra.create({
-    userId : req.user.id,
-    productos_comprados : req.body.productos_comprados,
-    precio_final : req.body.precio_final,
-    forma_entrega : req.body.forma_entrega,
+    userId: req.user.id,
+    productos_comprados: req.body.productos_comprados,
+    precio_final: req.body.precio_final,
+    forma_entrega: req.body.forma_entrega,
     medio_de_pago: req.body.medio_de_pago,
-    datos_contacto : req.body.datos_contacto
-  })
-  
-  res.send()
-})
+    datos_contacto: req.body.datos_contacto,
+  });
 
-
+  res.send();
+});
 
 module.exports = router;
