@@ -38,9 +38,9 @@ router.post("/productos/nuevo", async (req, res) => {
     modelo: req.body.modelo,
     price: req.body.price,
     marca: req.body.marca,
-    /*  image_url: req.body.image,
-      descripcion: req.body.desc ,*/},
-      );
+    image_url: req.body.image_url,
+    descripcion: req.body.descripcion,
+  });
 
   const agregarCategorias = req.body.categorias.map((categoria) => {
     return {
@@ -64,8 +64,6 @@ router.post("/productos/:id/actualizar", async (req, res) => {
   })
     .then((res) => res.dataValues)
     .then((productos) => {
-     
-
       return Productos.update(req.body, { where: { id: productos.id } });
     })
     .then((prodModif) => console.log(prodModif));
@@ -104,8 +102,7 @@ router.get("/productos", async (req, res) => {
         },
         {
           model: Categoria,
-          attributes: ["cat"]
-
+          attributes: ["cat"],
         },
       ],
     });
@@ -184,11 +181,14 @@ router.get("/categorias", async (req, res) => {
   }
 });
 
+
 router.delete("/categorias", async (req, res) => {
   try {
-    const categoria = await Categoria.destroy({where:{
-      cat: req.body.categoria
-    }});
+    const categoria = await Categoria.destroy({
+      where: {
+        cat: req.body.categoria,
+      },
+    });
 
     res.sendStatus(301);
   } catch (error) {
@@ -198,10 +198,12 @@ router.delete("/categorias", async (req, res) => {
 
 router.put("/categorias", async (req, res) => {
   try {
-    const categoria = await Categoria.findOne({where:{cat:req.body.categoria}});
+    const categoria = await Categoria.findOne({
+      where: { cat: req.body.categoria },
+    });
 
-    categoria.cat = req.body.newCategoria
-  
+    categoria.cat = req.body.newCategoria;
+
     await categoria.update();
     await categoria.save();
 

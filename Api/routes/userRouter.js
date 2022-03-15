@@ -7,9 +7,10 @@ const {
   Interaccion,
   Categoria,
   CatPro,
+  DetalleCompra
 } = require("../models");
 const { Auth } = require("../controllers/middleware/auth");
-
+const S = require("sequelize");
 const router = express.Router();
 const passport = require("passport");
 
@@ -75,7 +76,7 @@ router.post("/:id/addToCart", Auth, async (req, res) => {
       },
     },
   });
-
+  console.log("productoooooo",producto)
   if (!producto) return res.send("No hay stock");
 
   const { inventarios } = producto;
@@ -215,17 +216,33 @@ router.get("/category", async (req, res) => {
 
 router.get("/search/producto", async (req, res) => {
   const query = req.query;
+  const llave = Object.keys(query)[0]
+
   try {
     const productos = await Productos.findAll({
-      where: query,
+      where: {
+        [S.Op.or] : [
+          { modelo: {
+          [S.Op.iLike]: query[llave] + "%"
+        }},
+        {categorias:{
+          cat:{
+            [S.Op.iLike]: query[llave] + "%"
+          }
+        }},
+        {marca:{
+          [S.Op.iLike]: query[llave] + "%"
+        }}
+        ]
+      },
       include: [
         {
           model: Categoria,
         },
         {
           model: Inventario,
-        },
-      ],
+        }
+      ]
     });
 
     res.send(productos);
@@ -233,5 +250,26 @@ router.get("/search/producto", async (req, res) => {
     res.status(500).send(error);
   }
 });
+
+
+// CONTINUAR
+
+router.post("/finalizar_compra", async (req, res)=>{
+
+
+
+  await DetalleCompra.create({
+    userId : req.user.id,
+    productos_comprados : req.body.productos_comprados,
+    precio_final : req.body.precio_final,
+    forma_entrega : req.body.forma_entrega,
+    medio_de_pago: req.body.medio_de_pago,
+    datos_contacto : req.body.datos_contacto
+  })
+  
+  res.send()
+})
+
+
 
 module.exports = router;

@@ -1,24 +1,32 @@
 import "../styles/cardetail.css";
+import { ProductContext } from "../context/product";
+import { useContext } from "react";
+import ButtonSize from "./ButtonSize";
+import userReducer from "../states/usario";
+
 const CardDetail = () => {
-  const product = {
-    img: "https://cdn.flightclub.com/2200/TEMPLATE/288272/1.jpg",
-    marca: "Air Jordan",
-    model: "AIR JORDAN 6 RETRO 'UNC HOME'",
-    price: 289,
-    description:
-      "The Air Jordan 6 Retro 'UNC Home' pays homage to Michael Jordan’s alma mater, bearing a colorway reminiscent of the University of North Carolina. The classic hoops sneakers feature a white leather upper set against University Blue nubuck underlays. Hits of navy appear on the molded TPU heel tab and collar lining. Navy repeats on the midsole, which houses visible Air-sole cushioning. The jock tag on the heel reinforces the shoe’s varsity athletics theme.",
-  };
+  const { producto, setProducto } = useContext(ProductContext);
 
   return (
     <div className="cardetail">
       <div className="foto">
-        <img className="fotito" src={product.img} alt="" />
+        <img className="fotito" src={producto.image_url} alt="" />
       </div>
       <div className="desc">
         <div className="nose">
-          <span>{product.marca}</span>
-          <h1>{product.model}</h1>
-          <p>{product.description}</p>
+          <span>{producto.marca}</span>
+          <h1>{producto.modelo}</h1>
+          <div className="gridButton">
+            {producto.inventarios.map((t, i) => (
+              <ButtonSize key={i} talle={t.talle} />
+            ))}
+          </div>
+
+          <div>
+            <h3>Precio ${producto.price}</h3>
+            <button className="boton"> Añadir al Carrito</button>
+          </div>
+          <p>{producto.descripcion}</p>
         </div>
       </div>
     </div>

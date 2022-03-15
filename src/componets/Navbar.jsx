@@ -3,6 +3,8 @@ import "../styles/navbar.css";
 import logo from "../assets/logoMarca.png";
 import logoCarrito from "../assets/carrito.png";
 import { Link } from "react-router-dom";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Carrito from "./Carrito";
 
 export class Navbar extends Component {
   render() {
@@ -69,11 +71,20 @@ export class Navbar extends Component {
                   {" "}
                   Log in
                 </Link>
-                <button className="button is-primary" id="botonCarrito">
+                <button className="button is-primary" id="botonCarrito" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
                   <span className="icon">
                     <img src={logoCarrito} alt="logo" />
                   </span>
                 </button>
+                <div className="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+                <div className="offcanvas-header">
+                  <h2 id="offcanvasRightLabel" className="canvasTitle">Tu carrito de compras.</h2>
+                  <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div className="offcanvas-body">
+                  <Carrito/>
+                </div>
+              </div>
               </div>
             </div>
           </div>
