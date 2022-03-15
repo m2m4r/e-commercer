@@ -76,7 +76,7 @@ router.post("/:id/addToCart", Auth, async (req, res) => {
       },
     },
   });
-
+  console.log("productoooooo",producto)
   if (!producto) return res.send("No hay stock");
 
   const { inventarios } = producto;

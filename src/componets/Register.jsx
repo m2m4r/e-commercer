@@ -64,9 +64,6 @@ const Register = () => {
           <span className="icon is-small is-left">
             <i className="fas fa-envelope"></i>
           </span>
-          <span className="icon is-small is-right">
-            <i className="fas fa-check"></i>
-          </span>
         </p>
       </div>
       <div className="field">
@@ -80,9 +77,6 @@ const Register = () => {
           <span className="icon is-small is-left">
             <i className="fas fa-envelope"></i>
           </span>
-          <span className="icon is-small is-right">
-            <i className="fas fa-check"></i>
-          </span>
         </p>
       </div>
       <div className="field">
@@ -90,9 +84,6 @@ const Register = () => {
           <input {...dni} className="input" type="number" placeholder="DNI" />
           <span className="icon is-small is-left">
             <i className="fas fa-envelope"></i>
-          </span>
-          <span className="icon is-small is-right">
-            <i className="fas fa-check"></i>
           </span>
         </p>
       </div>
@@ -107,9 +98,6 @@ const Register = () => {
           <span className="icon is-small is-left">
             <i className="fas fa-envelope"></i>
           </span>
-          <span className="icon is-small is-right">
-            <i className="fas fa-check"></i>
-          </span>
         </p>
       </div>
       <div className="field">
@@ -123,9 +111,6 @@ const Register = () => {
           <span className="icon is-small is-left">
             <i className="fas fa-envelope"></i>
           </span>
-          <span className="icon is-small is-right">
-            <i className="fas fa-check"></i>
-          </span>
         </p>
       </div>
       <div className="field">
@@ -138,9 +123,6 @@ const Register = () => {
           />
           <span className="icon is-small is-left">
             <i className="fas fa-envelope"></i>
-          </span>
-          <span className="icon is-small is-right">
-            <i className="fas fa-check"></i>
           </span>
         </p>
       </div>

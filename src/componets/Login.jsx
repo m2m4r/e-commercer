@@ -29,7 +29,7 @@ const Login = function () {
           setBoton(<SubmitBtn clase="button is-success is-fullwidth" valor="Sing In"/>)
           setError(<ErrorMessage/>)
         return};
-        navigate("/home");
+        navigate("/");
       });
   };
   const register = () => {
@@ -48,9 +48,6 @@ const Login = function () {
           <input {...email} class="input" type="email" placeholder="Email" />
           <span class="icon is-small is-left">
             <i class="fas fa-envelope"></i>
-          </span>
-          <span class="icon is-small is-right">
-            <i class="fas fa-check"></i>
           </span>
         </p>
       </div>
