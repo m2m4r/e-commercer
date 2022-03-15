@@ -40,7 +40,11 @@ const dispatch=useDispatch()
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/detail" element={<CardDetail />} />
+<<<<<<< HEAD
         <Route path="/carrito" element={<Carrito/>}/>
+=======
+        <Route path="/carrito" element={<Carrito />} />
+>>>>>>> actualizacion app.js
       </Routes>
 
       {/* <Grid /> EL grid queda aca de prueba hasta que este el home component */}
