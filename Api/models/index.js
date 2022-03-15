@@ -3,9 +3,9 @@ const Productos = require("./Productos");
 const Inventario = require("./Inventario");
 const CartItem = require("./CartItem");
 const Interaccion = require("./Interacciones");
-const {Categoria, CatPro} = require("./Categoria")
+const Categoria = require("./Categoria")
 const DetalleCompra = require("./DetalleCompra")
-
+const CatPro = require("./CatPro")
 
 Productos.hasOne(CartItem);
 
