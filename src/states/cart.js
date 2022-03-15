@@ -20,7 +20,7 @@ export const updateCartItem = createAsyncThunk("ACTUALIZAR_CARRITO",(array)=>{
 })
 
 export const deleteCartItem = createAsyncThunk("ELIMINAR_DE_CARRITO",(product_Id)=>{ 
-  console.log("chuparle la vulva a tefi",product_Id)
+  console.log(product_Id)
   axios.delete(`/api/users/carrito/${product_Id}`).then(res=>console.log(res.data))
   .then(res=>res.data)
 })
