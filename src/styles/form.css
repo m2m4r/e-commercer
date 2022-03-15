@@ -1,47 +1,59 @@
 #login{
-    margin-top: 10em;
-    max-width: 35em;
-  }
+  margin-top: 10em;
+  max-width: 35em;
+}
 #margen{
-    margin-top:2em;
-    margin-bottom:2em;
+  margin-top:2em;
+  margin-bottom:2em;
 }
 #borderText{
-  border-bottom: 1px solid rgba(77, 75, 75 , 0.4);
-  box-shadow: 0px 2px 0px rgba(168, 165, 165 , 0,2);
-  justify-content: center;
-  display: flex;
+border-bottom: 1px solid rgba(77, 75, 75 , 0.4);
+box-shadow: 0px 2px 0px rgba(168, 165, 165 , 0,2);
+justify-content: center;
+display: flex;
+width: 100%;
+}
+#anchoInput{
+  width: 100%;
+}
+#sessionTitle{
+  font-size: 2em;
+  margin: 1em;
 }
 #canvas{
-  max-width: 22em;
+max-width: 22em;
 }
 .canvasTitle{
-  font-size: 2em;
+font-size: 2em;
 }
 .cartImg{
-  min-width: 5.5em;
-  min-height: 5.5em;
+min-width: 5.5em;
+min-height: 5.5em;
 }
 .itemTitle{
-  font-size: 0.9em;
-  margin-bottom: 2em;
+font-size: 0.8em;
+min-width: 18em;
+margin-bottom: 2em;
 }
 .colFlex{
-  display: flex;
-  flex-direction: column;
+display: flex;
+flex-direction: column;
 }
 #colItem{
-  max-width: 3em;
+max-width: 2.5em;
 }
 .subTotal{
-  font-size: 10px;
+font-size: 10px;
 }
 #itemContent{
-  padding-bottom: 3em;
+padding-bottom: 1em;
 }
 #totalTitle{
-  font-size: 1.4em;
+font-size: 1.4em;
 }
 #totalMonto{
-  font-size: 1.8em;
+font-size: 1.8em;
+}
+#btn{
+margin:0;
 }

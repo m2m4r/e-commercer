@@ -49,12 +49,12 @@ const Register = () => {
     <form id="login" className="container" onSubmit={handleSubmit}>
       <div id="margen" class="field">
         <p id="borderText" class="control">
-          <a>Register</a>
+          <a id="sessionTitle" >Register</a>
         </p>
       </div>
       <br />
       <div className="field">
-        <p className="control has-icons-left has-icons-right">
+        <p id="anchoInput" className="control has-icons-left has-icons-right">
           <input
             {...firstName}
             className="input"
@@ -67,7 +67,7 @@ const Register = () => {
         </p>
       </div>
       <div className="field">
-        <p className="control has-icons-left has-icons-right">
+        <p id="anchoInput" className="control has-icons-left has-icons-right">
           <input
             {...lastName}
             className="input"
@@ -80,7 +80,7 @@ const Register = () => {
         </p>
       </div>
       <div className="field">
-        <p className="control has-icons-left has-icons-right">
+        <p id="anchoInput" className="control has-icons-left has-icons-right">
           <input {...dni} className="input" type="number" placeholder="DNI" />
           <span className="icon is-small is-left">
             <i className="fas fa-envelope"></i>
@@ -88,7 +88,7 @@ const Register = () => {
         </p>
       </div>
       <div className="field">
-        <p className="control has-icons-left has-icons-right">
+        <p id="anchoInput" className="control has-icons-left has-icons-right">
           <input
             {...userName}
             className="input"
@@ -101,7 +101,7 @@ const Register = () => {
         </p>
       </div>
       <div className="field">
-        <p className="control has-icons-left has-icons-right">
+        <p id="anchoInput" className="control has-icons-left has-icons-right">
           <input
             {...email}
             className="input"
@@ -114,7 +114,7 @@ const Register = () => {
         </p>
       </div>
       <div className="field">
-        <p className="control has-icons-left has-icons-right">
+        <p id="anchoInput" className="control has-icons-left has-icons-right">
           <input
             {...telefono}
             className="input"
@@ -127,7 +127,7 @@ const Register = () => {
         </p>
       </div>
       <div className="field">
-        <p className="control has-icons-left">
+        <p id="anchoInput" className="control has-icons-left">
           <input
             {...pass}
             className="input"
@@ -148,7 +148,7 @@ const Register = () => {
         </p>
       </div>
       <div id="margen" className="field">
-        <p className="control">
+        <p id="anchoInput" className="control">
           <button onClick={login} className="button is-link is-fullwidth">
             Sing In
           </button>
