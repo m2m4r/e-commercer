@@ -5,6 +5,7 @@ import logoCarrito from "../assets/carrito.png";
 import { Link } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Carrito from "./Carrito";
+import { useSelector } from "react-redux";
 
 export class Navbar extends Component {
   render() {

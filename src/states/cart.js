@@ -6,36 +6,29 @@ export const cart = createAsyncThunk("CARRITO", () => {
 });
 
 export const addCartItem = createAsyncThunk("AGREGAR_A_CARRITO", (options) => {
+  console.log("ver opciones!!!!!!!!!",options)
   return axios
     .post(`/api/users/${options.productId}/addToCart`, {
       cantidad: options.cantidad,
       talle: options.talle,
     })
-    .then((res) => res.data);
+    .then(() => {return axios.get(`/api/users/carrito`).then((res) => res.data);});
 });
 
-export const updateCartItem = createAsyncThunk(
-  "ACTUALIZAR_CARRITO",
-  (array) => {
-    return axios
-      .put(`/api/users/carrito/${array[0]}`, {
-        cantidad: array[1],
-        talle: array[2],
-      })
-      .then((res) => res.data);
-  }
-);
+export const updateCartItem = createAsyncThunk("ACTUALIZAR_CARRITO",(array)=>{ 
+  return axios.put(`/api/users/carrito/${array[0]}`,{
+    cantidad: array[1],
+    talle: array[2]
+  })
+  .then(res=>res.data)
+  .catch(err=>err)
+})
 
-export const deleteCartItem = createAsyncThunk(
-  "ELIMINAR_DE_CARRITO",
-  (product_Id) => {
-    console.log(product_Id);
-    axios
-      .delete(`/api/users/carrito/${product_Id}`)
-      .then((res) => console.log(res.data))
-      .then((res) => res.data);
-  }
-);
+export const deleteCartItem = createAsyncThunk("REMOVE_CARRITO",(id)=>{
+  axios.delete(`/api/users/carrito/${id}`).then(()=>{
+    return axios.get(`/api/users/carrito`)(res=>res.data)})
+    .catch(err=>err)
+})
 
 const cartReducer = createReducer([], {
   [cart.fulfilled]: (state, action) => action.payload,

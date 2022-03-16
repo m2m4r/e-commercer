@@ -148,6 +148,9 @@ router.get("/carrito", Auth, async (req, res) => {
     where: {
       userId: req.user.id,
     },
+    order: [
+      ['createdAt', 'ASC']
+    ]
   });
   res.send(allItems);
 });
@@ -179,7 +182,10 @@ router.put("/carrito/:id", Auth, async (req, res) => {
     const allItems = await CartItem.findAll({
       where:{
         userId: req.user.id
-      }
+      },
+      order: [
+        ['createdAt', 'ASC']
+      ]
     })
     res.send(allItems)
     
@@ -417,4 +423,3 @@ router.get("/productos/pages/:page", async (req, res) => {
   }
 });
 
-module.exports = router;

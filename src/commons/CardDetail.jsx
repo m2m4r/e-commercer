@@ -44,7 +44,7 @@ const CardDetail = () => {
 
           <div>
             <h3>Precio ${producto.price}</h3>
-            <button className="boton" onClick={sendCart}>
+            <button className="boton" onClick={()=>{sendCart()}}>
               {" "}
               Añadir al Carrito
             </button>
