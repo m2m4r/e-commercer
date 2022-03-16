@@ -45,7 +45,9 @@ router.get("/usuarios", async (req, res) => {
 })
 
 router.post("/productos/nuevo", async (req, res) => {
+
   let obj = {};
+
   const producto = await Productos.create({
     modelo: req.body.modelo,
     price: req.body.price,
@@ -54,14 +56,17 @@ router.post("/productos/nuevo", async (req, res) => {
     descripcion: req.body.descripcion,
   });
 
-  const agregarCategorias = req.body.categorias.map((categoria) => {
+  let agregarCategorias;
+  if(!!req.body.categorias.length){
+  agregarCategorias = req.body.categorias.map((categoria) => {
     return {
       categoriaId: categoria,
       productoId: producto.id,
     };
-  });
-
+  })
   CatPro.bulkCreate(agregarCategorias);
+  };
+
 
   res.send("creado o modificado");
 });
