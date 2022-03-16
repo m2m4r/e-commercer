@@ -31,8 +31,13 @@ router.put('/sacarAdmin/:id', async (req, res) => {
 // falta el Auth de Admin
 router.delete('/usuario/:id', async (req, res) => {
   try {
-    await User.destroy({ where: { id: req.params.id } });
-    res.send("Usuario eliminado");
+    const usuario = await User.findOne({ where: { id: req.params.id } });
+    if(usuario.id === req.user.id) {
+      res.send('No te podés eliminar a vos mismo.')
+    } else {
+      await User.destroy({ where: { id: usuario.id } })
+      res.send("Usuario eliminado");
+    }
   } catch (error) {
     res.send(error);
   }
