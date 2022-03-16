@@ -45,7 +45,6 @@ router.put("/edit", Auth, async (req, res) => {
   try {
     const usuarioActualizado = await User.update(req.body, {
       where: { id: req.user.id },
-      individualHooks: true,
     });
     res.status(201).send(usuarioActualizado);
   } catch (error) {
