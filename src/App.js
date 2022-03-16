@@ -11,6 +11,7 @@ import CardDetail from "./commons/CardDetail";
 import { effectProducts } from "./states/productos";
 import { cart } from "./states/cart";
 import { useSelector } from "react-redux";
+import Footer from "./componets/Footer";
 import SendPage from "./componets/SendPage";
 
 /* Renderizado condicional, admin y carrito si no hay un User loggeado */
@@ -50,9 +51,7 @@ function App() {
         <Route path="/carrito" element={<Carrito />} />
         <Route path="/datos_de_envio" element={<SendPage />} />
       </Routes>
-
-      {/* <Grid /> EL grid queda aca de prueba hasta que este el home component */}
-      {"Footer re cheto"}
+      <Footer />
     </div>
   );
 }
