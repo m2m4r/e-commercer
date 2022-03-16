@@ -6,12 +6,15 @@ export const cart = createAsyncThunk("CARRITO", () => {
 });
 
 export const addCartItem = createAsyncThunk("AGREGAR_A_CARRITO", (options) => {
+  console.log("ver opciones!!!!!!!!!", options);
   return axios
     .post(`/api/users/${options.productId}/addToCart`, {
       cantidad: options.cantidad,
       talle: options.talle,
     })
-    .then((res) => res.data);
+    .then(() => {
+      return axios.get(`/api/users/carrito`).then((res) => res.data);
+    });
 });
 
 export const updateCartItem = createAsyncThunk(

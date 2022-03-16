@@ -18,7 +18,11 @@ const CardDetail = () => {
 
   const sendCart = () => {
     dispatch(
-      addCartItem({ productId: producto.id, cantidad: cantidad, talle: size })
+      addCartItem({
+        productId: producto.id,
+        cantidad: Number(cantidad),
+        talle: Number(size),
+      })
     );
   };
 
