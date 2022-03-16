@@ -10,20 +10,26 @@ const CartItem = function ({producto}){
     const [item , setItem] = useState({})
     // const [cantidad , setCantidad] = useState(producto.cantidad)
     useEffect(()=>{
-        axios.get(`/api/admin/productos/${producto.productoId}`)
+        axios.get(`/api/users/productos/${producto.productoId}`)
         .then((res)=>setItem(res.data))
         .catch(err=>console.log(err))
     },[])
     const handleDelete = ()=>{
-        dispatch(deleteCartItem(producto.productoId))
+        dispatch(deleteCartItem(producto.id))
+        .then((res)=>console.log("eliminado",res))
+        .catch(err=>console.log(err))
     }
     const resta = ()=>{
         if(producto.cantidad>0){
             dispatch(updateCartItem([producto.productoId, producto.cantidad-1 , producto.talle]))
+            .then(r=>console.log("modificado",r))
+            .catch(err=>console.log(err))
         }
     }
     const suma = ()=>{
         dispatch(updateCartItem([producto.productoId, producto.cantidad+1 , producto.talle]))
+        .then(r=>console.log("modificado",r))
+        .catch(err=>console.log(err))
     }
     return (
         <div id="itemContent" className="row">
@@ -39,7 +45,7 @@ const CartItem = function ({producto}){
             <button onClick={suma} className="button is-small"><i className="fa-solid fa-plus"></i></button>
             <button onClick={()=>{handleDelete()}} className="button is-small"><i className="fa-solid fa-trash-can"></i></button>
             </div>
-            <div id="subTotal" className="col-3 offset-md-3">
+            <div id="subTotal" className="col-3 offset-md-2">
                 <h5 className="subTotal">Subtotal</h5>
                 <h6>{`$ ${producto.costo * producto.cantidad}`}</h6>
             </div>
