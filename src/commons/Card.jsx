@@ -4,11 +4,11 @@ import { useContext } from "react";
 import { useNavigate } from "react-router";
 
 const Card = (product) => {
-  const { producto, setProducto } = useContext(ProductContext);
+  const { setProducto } = useContext(ProductContext);
   const navigate = useNavigate();
   const productClick = () => {
     setProducto(product.product);
-    navigate("/detail");
+    navigate(`/detail/${product.product.id}`);
   };
   return (
     <li className="card" onClick={productClick}>

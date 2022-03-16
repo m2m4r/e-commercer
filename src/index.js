@@ -12,11 +12,15 @@ import store from "./states/store";
 
 import ProductContextProvider from "./context/product";
 
+import SizeContextProvider from "./context/size";
+
 ReactDOM.render(
   <BrowserRouter>
     <Provider store={store}>
       <ProductContextProvider>
-        <App />
+        <SizeContextProvider>
+          <App />
+        </SizeContextProvider>
       </ProductContextProvider>
     </Provider>
   </BrowserRouter>,
