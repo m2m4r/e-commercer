@@ -71,6 +71,15 @@ router.post("/logout", (req, res) => {
   res.sendStatus(200);
 });
 
+router.delete('/autoDestroy', Auth, async (req, res) => {
+  try {
+    await User.destroy({ where: { id: req.user.id } });
+    res.send("Usuario eliminado");
+  } catch (error) {
+    res.send(error);
+  }
+})
+
 router.get("/productos/:id", async (req, res) => {
   try {
     const producto = await Productos.findOne({where: { id: req.params.id }})
