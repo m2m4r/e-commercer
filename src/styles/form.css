@@ -57,3 +57,9 @@ font-size: 1.8em;
 #btn{
 margin:0;
 }
+#envioForm{
+  margin-top: 10em;
+}
+#verifyContainer{
+  display: flex;
+}

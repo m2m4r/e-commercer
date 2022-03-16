@@ -12,6 +12,7 @@ import { effectProducts } from "./states/productos";
 import { cart } from "./states/cart";
 import { useSelector } from "react-redux";
 import Footer from "./componets/Footer";
+import SendPage from "./componets/SendPage";
 
 /* Renderizado condicional, admin y carrito si no hay un User loggeado */
 
@@ -42,13 +43,13 @@ function App() {
   return (
     <div className="App">
       <Navbar />
-
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/detail/:id" element={<CardDetail />} />
         <Route path="/carrito" element={<Carrito />} />
+        <Route path="/datos_de_envio" element={<SendPage />} />
       </Routes>
       <Footer />
     </div>

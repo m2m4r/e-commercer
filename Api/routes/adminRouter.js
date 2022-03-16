@@ -31,8 +31,13 @@ router.put('/sacarAdmin/:id', async (req, res) => {
 // falta el Auth de Admin
 router.delete('/usuario/:id', async (req, res) => {
   try {
-    await User.destroy({ where: { id: req.params.id } });
-    res.send("Usuario eliminado");
+    const usuario = await User.findOne({ where: { id: req.params.id } });
+    if(usuario.id === req.user.id) {
+      res.send('No te podés eliminar a vos mismo.')
+    } else {
+      await User.destroy({ where: { id: usuario.id } })
+      res.send("Usuario eliminado");
+    }
   } catch (error) {
     res.send(error);
   }
@@ -45,7 +50,9 @@ router.get("/usuarios", async (req, res) => {
 })
 
 router.post("/productos/nuevo", async (req, res) => {
+
   let obj = {};
+
   const producto = await Productos.create({
     modelo: req.body.modelo,
     price: req.body.price,
@@ -54,14 +61,17 @@ router.post("/productos/nuevo", async (req, res) => {
     descripcion: req.body.descripcion,
   });
 
-  const agregarCategorias = req.body.categorias.map((categoria) => {
+  let agregarCategorias;
+  if(!!req.body.categorias.length){
+  agregarCategorias = req.body.categorias.map((categoria) => {
     return {
       categoriaId: categoria,
       productoId: producto.id,
     };
-  });
-
+  })
   CatPro.bulkCreate(agregarCategorias);
+  };
+
 
   res.send("creado o modificado");
 });

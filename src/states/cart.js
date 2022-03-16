@@ -25,20 +25,19 @@ export const updateCartItem = createAsyncThunk(
         cantidad: array[1],
         talle: array[2],
       })
-      .then((res) => res.data);
+      .then((res) => res.data)
+      .catch((err) => err);
   }
 );
 
-export const deleteCartItem = createAsyncThunk(
-  "ELIMINAR_DE_CARRITO",
-  (product_Id) => {
-    console.log(product_Id);
-    axios
-      .delete(`/api/users/carrito/${product_Id}`)
-      .then((res) => console.log(res.data))
-      .then((res) => res.data);
-  }
-);
+export const deleteCartItem = createAsyncThunk("REMOVE_CARRITO", (id) => {
+  axios
+    .delete(`/api/users/carrito/${id}`)
+    .then(() => {
+      return axios.get(`/api/users/carrito`)((res) => res.data);
+    })
+    .catch((err) => err);
+});
 
 const cartReducer = createReducer([], {
   [cart.fulfilled]: (state, action) => action.payload,
