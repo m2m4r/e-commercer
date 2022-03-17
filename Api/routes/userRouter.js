@@ -63,7 +63,21 @@ router.post("/logout", (req, res) => {
 
 router.get("/productos/:id", async (req, res) => {
   try {
-    const producto = await Productos.findOne({ where: { id: req.params.id } });
+    const producto = await Productos.findOne({ 
+      where: { id: req.params.id },
+      include: [
+        {
+          model: Inventario,
+        },
+        {
+          model: Categoria,
+          through: {
+            attributes: ["cat"],
+          },
+        },
+
+      ], 
+    });
     res.send(producto);
   } catch {
     res.sendStatus(404);
