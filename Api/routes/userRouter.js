@@ -152,7 +152,9 @@ router.get("/category", async (req, res) => {
   }
 });
 
+
 // Finalizar compra
+
 
 router.post("/finalizar_compra", Auth, async (req, res) => {
   const userAuth = process.env.MAIL;
@@ -244,5 +246,6 @@ router.get("/detalleCompras", Auth, async (req, res) => {
     res.status(500).send(error);
   }
 });
+
 
 module.exports = router;

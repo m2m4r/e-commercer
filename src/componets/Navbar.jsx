@@ -37,20 +37,20 @@ const Navbar = () => {
           <a className="navbar-link">Sneakers</a>
 
           <div className="navbar-dropdown">
-            <a className="navbar-item">Nike</a>
-            <a className="navbar-item">Addidas</a>
-            <a className="navbar-item">Topper</a>
+            <Link to="/marca/nike" className="navbar-item">
+              Nike
+            </Link>
+            <Link to="/marca/adidas" className="navbar-item">
+              Adidas
+            </Link>
+            <Link to="/marca/air&jordan" className="navbar-item">
+              Air Jordan
+            </Link>
             <a className="navbar-item">Otras marcas</a>
           </div>
         </div>
-        <div className="navbar-item has-dropdown is-hoverable">
-          <a className="navbar-link">Ropa</a>
-          <div className="navbar-dropdown">
-            <a className="navbar-item">Nike</a>
-            <a className="navbar-item">Addidas</a>
-            <a className="navbar-item">Topper</a>
-            <a className="navbar-item">Otras marcas</a>
-          </div>
+        <div className="navbar-item ">
+          <Link to="/categoria">Products</Link>
         </div>
         <div className="navbar-brand" id="logoMarca">
           <Link to="/" className="navbar-item" href="#" id="logo">
