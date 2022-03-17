@@ -1,8 +1,6 @@
 const express = require("express");
 const {Productos,Inventario,Categoria,CatPro} = require("../models");
 
-const nodemailer = require("nodemailer");
-
 const { AuthAdmin } = require("../controllers/middleware/auth");
 
 const router = express.Router();
@@ -13,8 +11,6 @@ const router = express.Router();
 
 router.post("/nuevo", AuthAdmin, async (req, res) => {
 
-    let obj = {};
-  
     const producto = await Productos.create({
       modelo: req.body.modelo,
       price: req.body.price,
@@ -61,7 +57,7 @@ router.post("/nuevo", AuthAdmin, async (req, res) => {
   
   // Ingresar o modificar el inventario
 
-  router.post("/:id/stock", AuthAdmin,  async (req, res) => {
+  router.post("/:id/stock",  async (req, res) => {
     try {
       const [producto, created] = await Inventario.findOrCreate({
         where: { product_id: req.params.id, talle: req.body.talle },
@@ -136,7 +132,7 @@ router.post("/nuevo", AuthAdmin, async (req, res) => {
     }
   });
 
-  //Borrar producot en tabla producto e inventario
+  //Borrar producto en tabla producto e inventario
   
   router.delete("/:id", AuthAdmin, async (req, res) => {
     try {
@@ -151,6 +147,22 @@ router.post("/nuevo", AuthAdmin, async (req, res) => {
         }
       );
       res.send("borrado");
+    } catch (error) {
+      res.send(error);
+    }
+  });
+
+
+//stock full
+
+  router.get("/stock", async (req, res) => {
+    try {
+      const productos = await Inventario.findAll({
+          order: [
+            [Inventario, 'talle', 'ASC']]
+        },
+      );
+      res.send(productos);
     } catch (error) {
       res.send(error);
     }

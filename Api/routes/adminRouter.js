@@ -1,9 +1,9 @@
 const express = require("express");
-const {User,DetalleCompra, Interaccion} = require("../models");
+const {User} = require("../models");
 const catAdmin = require("./categoriaAdmin")
 const prodAdmin = require("./productoAdmin")
 const ordenCompra = require("./productoAdmin")
-const nodemailer = require("nodemailer");
+
 
 const { AuthAdmin } = require("../controllers/middleware/auth"); //middleware para comprobar que el usuario logeado sea admin
 
