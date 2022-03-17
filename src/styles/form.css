@@ -1,5 +1,6 @@
 #login{
   margin-top: 10em;
+  margin-bottom: 10em;
   max-width: 35em;
 }
 #margen{
@@ -62,4 +63,14 @@ margin:0;
 }
 #verifyContainer{
   display: flex;
+}
+.cardContainer{
+  display: flex;
+}
+#margenKey{
+  max-width: 7em;
+  margin-left: 14em;
+}
+#exampleModalLabel{
+  font-size: 2em;
 }

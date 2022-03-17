@@ -13,6 +13,9 @@ import { cart } from "./states/cart";
 import { useSelector } from "react-redux";
 import Footer from "./componets/Footer";
 import SendPage from "./componets/SendPage";
+import BuyPage from "./componets/BuyPage";
+import Confirm from "./componets/Confirm";
+import AdminPage from "./componets/AdminPage";
 
 /* Renderizado condicional, admin y carrito si no hay un User loggeado */
 
@@ -50,6 +53,9 @@ function App() {
         <Route path="/detail/:id" element={<CardDetail />} />
         <Route path="/carrito" element={<Carrito />} />
         <Route path="/datos_de_envio" element={<SendPage />} />
+        <Route path="/buy" element={<BuyPage />} />
+        <Route path="/confirm" element={<Confirm />} />
+        <Route path="/admin" element={<AdminPage />} />
       </Routes>
       <Footer />
     </div>
@@ -57,16 +63,3 @@ function App() {
 }
 
 export default App;
-
-/*
-Las routes quedan aca hasta que estén listos los componentes a renderizar 
-<Routes>
-        
-        <Route path="/register" element={"register"} />
-        <Route path="/login" element={"login"} />
-        <Route path="/admin" element={"admin"} />
-        <Route path="/cart" element={"cart"} />
-
-        <Route path="/sku" element={"productCard"} />
-</Routes>
-*/
