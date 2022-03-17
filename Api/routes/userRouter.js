@@ -12,11 +12,20 @@ const {
 const { Auth } = require("../controllers/middleware/auth");
 const S = require("sequelize");
 const router = express.Router();
+const rutasProductos = require("./productos")
+const rutasCarrito = require("./carrito")
+const rutasReview = require("./review")
 const passport = require("passport");
 const nodemailer = require("nodemailer");
 const dotenv = require("dotenv");
 
 dotenv.config();
+
+router.use("/productos", rutasProductos)
+router.use("/carrito", rutasCarrito)
+router.use("/review", rutasReview)
+
+// Registro local de un nuevo usuario
 
 router.post("/register", async (req, res, next) => {
   try {
@@ -37,9 +46,25 @@ router.post("/register", async (req, res, next) => {
   }
 });
 
+// Login local de un nuevo usuario
+
 router.post("/login", passport.authenticate("user"), (req, res) => {
   res.send(req.user);
 });
+
+// Primer paso de login con authenticator de google
+
+router.get('/auth/google',passport.authenticate('google', { scope: [ 'email', 'profile' ] }
+));
+
+// Segundo paso de login con authenticator de google
+
+router.get('/auth/google/callback', passport.authenticate( 'google', {
+  successRedirect: 'http://localhost:3000/',
+  failureRedirect: 'http://localhost:3000/login'
+}));
+
+// Editar perfil usuario
 
 router.put("/edit", Auth, async (req, res) => {
   try {
@@ -52,23 +77,18 @@ router.put("/edit", Auth, async (req, res) => {
   }
 });
 
+// Chequeo de persistencia
+
 router.get("/me", Auth, (req, res) => {
   res.send(req.user);
 });
+
+// Logout perfil conectado
 
 router.post("/logout", (req, res) => {
   req.logOut();
   res.sendStatus(200);
 });
-
-router.delete('/autoDestroy', Auth, async (req, res) => {
-  try {
-    await User.destroy({ where: { id: req.user.id } });
-    res.send("Usuario eliminado");
-  } catch (error) {
-    res.send(error);
-  }
-})
 
 router.get("/productos/:id", async (req, res) => {
   try {
@@ -83,28 +103,7 @@ router.get("/productos/:id", async (req, res) => {
   }
 });
 
-router.get("/productos", async (req, res) => {
-  try {
-    const productos = await Productos.findAll({
-      include: [
-        {
-          model: Inventario,
-        },
-        {
-          model: Categoria,
-          through: {
-            attributes: ["cat"],
-          },
-        },
-        
-      ],
-    });
-    res.send(productos);
-  } catch (error) {
-    res.send(error);
-  }
-});
-
+// Añadir producto al carrito
 router.post("/:id/addToCart", Auth, async (req, res) => {
   try {
     const producto = await Productos.findByPk(req.params.id, {
@@ -153,117 +152,7 @@ router.post("/:id/addToCart", Auth, async (req, res) => {
   }
 });
 
-router.get("/carrito", Auth, async (req, res) => {
-  try {
-    const allItems = await CartItem.findAll({
-      where: {
-        userId: req.user.id,
-      },
-      order: [["createdAt", "ASC"]],
-    });
-    res.send(allItems);
-  } catch (error) {
-    res.status(304).send(error);
-  }
-});
-
-router.put("/carrito/:id", Auth, async (req, res) => {
-  try {
-    const producto = await Productos.findByPk(req.params.id, {
-      include: {
-        model: Inventario,
-        where: {
-          talle: req.body.talle,
-        },
-      },
-    });
-
-    const { inventarios } = producto;
-    const cantidadDisponible = inventarios[0].dataValues.stock;
-
-    if (cantidadDisponible >= req.body.cantidad) {
-      const item = await CartItem.findOne({
-        where: {
-          userId: req.user.id,
-          productoId: req.params.id,
-          talle: req.body.talle,
-        },
-      });
-      await item.update({ cantidad: req.body.cantidad });
-      await item.save();
-
-      const allItems = await CartItem.findAll({
-        where: {
-          userId: req.user.id,
-        },
-        order: [["createdAt", "ASC"]],
-      });
-      res.send(allItems);
-    } else {
-      res.sendStatus(304);
-    }
-  } catch (error) {
-    res.send(error);
-  }
-});
-
-router.delete("/carrito/:id", Auth, async (req, res) => {
-  try {
-    await CartItem.destroy({
-      where: {
-        userId: req.user.id,
-        id: req.params.id,
-      },
-    });
-
-    const allItems = await CartItem.findAll({
-      where: {
-        userId: req.user.id,
-      },
-    });
-    res.send(allItems);
-  } catch (error) {
-    res.status(400).send(error);
-  }
-
-  // res.send("El producto se elimino del carrito");
-});
-
-router.post("/:id/review", Auth, async (req, res) => {
-  try {
-    const [interaccion, created] = await Interaccion.findOrCreate({
-      where: {
-        userId: req.user.id,
-        productoId: req.params.id,
-      },
-      defaults: {
-        rating: req.body.rating,
-        comentario: req.body.comentario,
-        userId: req.user.id,
-        productoId: req.params.id,
-      },
-    });
-
-    if (created) {
-      res.send("Gracias por dejar tu opinión.");
-    } else {
-      res.send("Ya dejaste una opinión te lo agradecemos tambien.");
-    }
-  } catch (error) {
-    res.send(error);
-  }
-});
-
-router.delete("/:id/review", Auth, async (req, res) => {
-  Interaccion.destroy({
-    where: {
-      userId: req.user.id,
-      productoId: req.params.id,
-    },
-  }).then(() =>
-    res.send("Eliminaste tu comentario, deja tu opinion cuando quieras.")
-  );
-});
+// Traer todas las categorias
 
 router.get("/category", async (req, res) => {
   try {
@@ -284,44 +173,7 @@ router.get("/category", async (req, res) => {
   }
 });
 
-router.get("/search/producto", async (req, res) => {
-  const query = req.query;
-  let llave = Object.keys(query)[0];
-  llave = llave.toLowerCase();
-  console.log(`${query[llave]}%`);
-
-  try {
-    const productos = await Productos.findAll({
-      include: [
-        {
-          model: Categoria,
-          as: "categorias",
-        },
-        {
-          model: Inventario,
-        },
-      ],
-      where: {
-        [S.Op.or]: [
-          {
-              modelo: { 
-                [S.Op.iLike]:"%"+query[llave]+"%",
-              },
-            },
-            {
-              marca: {
-                [S.Op.iLike]: "%"+query[llave]+"%",
-              },
-            },
-        ],
-      },
-    });
-
-    res.send(productos);
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
+// Finalizar compra
 
 router.post("/finalizar_compra", Auth, async (req, res) => {
   const userAuth = process.env.MAIL;
@@ -332,8 +184,8 @@ router.post("/finalizar_compra", Auth, async (req, res) => {
     port: 465,
     secure: true,
     auth: {
-      user: userAuth,
-      pass: passAuth,
+      user: 'plataformasneakers@gmail.com',
+      pass: 'mikzmknpflldwbae',
     },
   });
 
@@ -398,6 +250,8 @@ router.post("/finalizar_compra", Auth, async (req, res) => {
   );
 });
 
+// Obtener historial de compras
+
 router.get("/detalleCompras", Auth, async (req, res) => {
   try {
     const historial = await DetalleCompra.findAll({
@@ -409,43 +263,6 @@ router.get("/detalleCompras", Auth, async (req, res) => {
     res.send(historial);
   } catch (error) {
     res.status(500).send(error);
-  }
-});
-
-router.get("/productos/pages/:page", async (req, res) => {
-  try {
-    const page =
-      req.params.page === "1" ? 0 : (Number(req.params.page) - 1) * 12;
-    const productos = await Productos.findAll({
-      include: [{ model: Categoria }, { model: Inventario }],
-      offset: page,
-      limit: 12,
-    });
-    res.send(productos);
-  } catch (error) {
-    res.send(error);
-  }
-});
-
-
-router.get("/review/:id/", async (req, res) => {
-  try {
-    
-    const review = await Productos.findOne({
-      where: {
-        id: req.params.id
-      },
-      include: {   
-            model: Interaccion,
- 
-      }
-    });
-
-    res.send(review.interaccions)
-
-  } catch (error) {
-    console.log(error)
-    res.send(error);
   }
 });
 

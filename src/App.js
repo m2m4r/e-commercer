@@ -33,6 +33,7 @@ function App() {
       })
       .catch((err) => console.log(err));
   }, []);
+
   useEffect(() => {
     dispatch(cart())
       .then((res) => {
@@ -40,6 +41,7 @@ function App() {
       })
       .catch((err) => console.log(err));
   }, [usuario]);
+
   return (
     <div className="App">
       <Navbar />
