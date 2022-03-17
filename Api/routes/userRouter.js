@@ -54,6 +54,14 @@ router.post("/login", passport.authenticate("user"), (req, res) => {
   res.send(req.user);
 });
 
+router.get('/auth/google',passport.authenticate('google', { scope: [ 'email', 'profile' ] }
+));
+
+router.get('/auth/google/callback', passport.authenticate( 'google', {
+  successRedirect: 'http://localhost:3000/',
+  failureRedirect: 'http://localhost:3000/login'
+}));
+
 router.put("/edit", Auth, async (req, res) => {
   const usuarioActualizado = await User.update(req.body, {
     where: { id: req.user.id },
@@ -73,7 +81,14 @@ router.post("/logout", (req, res) => {
 
 router.get("/productos/:id", async (req, res) => {
   try {
-    const producto = await Productos.findOne({where: { id: req.params.id }})
+    const producto = await Productos.findOne({
+      where: {
+        id: req.params.id 
+      },
+      include:{
+        model: Interaccion
+      }
+    })
     res.send(producto);
   }
   catch {
@@ -94,7 +109,10 @@ router.get("/productos", async (req, res) => {
             attributes: ["cat"],
           }
         },
-      ],
+        {
+          model: Interaccion
+        }
+      ]
     });
     res.send(productos);
   } catch (error) {
@@ -111,7 +129,7 @@ router.post("/:id/addToCart", Auth, async (req, res) => {
       },
     },
   });
-  console.log("productoooooo",producto)
+  
   if (!producto) return res.send("No hay stock");
 
   const { inventarios } = producto;
