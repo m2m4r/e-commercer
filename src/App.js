@@ -31,8 +31,6 @@ const dispatch=useDispatch()
     .then((res)=>{console.log("3",res)})
     .catch(err=>console.log(err))
   }, [usuario])
-  const user = useSelector((state)=> state.user)
-  console.log(user)
 
   return (
     <div className="App">
