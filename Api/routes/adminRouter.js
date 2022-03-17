@@ -72,7 +72,6 @@ router.post("/productos/nuevo", async (req, res) => {
 });
 
 router.post("/productos/:id/actualizar", async (req, res) => {
-  console.log(req.body);
 
   Productos.findOne({
     where: {
