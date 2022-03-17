@@ -72,7 +72,11 @@ router.delete('/autoDestroy', Auth, async (req, res) => {
 
 router.get("/productos/:id", async (req, res) => {
   try {
-    const producto = await Productos.findOne({ where: { id: req.params.id } });
+    const producto = await Productos.findOne({ 
+      where: { id: req.params.id }, 
+      include: {
+        model: Interaccion
+      }});
     res.send(producto);
   } catch {
     res.sendStatus(404);

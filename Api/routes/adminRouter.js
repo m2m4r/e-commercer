@@ -18,7 +18,10 @@ const router = express.Router();
 
 // falta el Auth de Admin
 router.put('/darAdmin/:id', async (req, res) => {
-  await User.update({ permiso: 'admin' }, { where: { id: req.params.id } })
+  await User.update({ 
+    permiso: 'admin' 
+  },
+  { where: { id: req.params.id } })
   res.status(201).send('Usuario promovido a administrador.')
 })
 
@@ -39,6 +42,23 @@ router.delete('/usuario/:id', async (req, res) => {
       res.send("Usuario eliminado");
     }
   } catch (error) {
+    res.send(error);
+  }
+})
+
+router.get('/usuario/:id', async (req, res) => {
+  try {
+    const usuario = await User.findOne({ 
+      where: { 
+        id: req.params.id 
+      }, 
+      include: {
+        model: Interaccion
+      }});
+
+    res.send(usuario)
+  }
+  catch(error){
     res.send(error);
   }
 })
@@ -243,7 +263,6 @@ router.put("/categorias", async (req, res) => {
     res.send(error);
   }
 });
-
 
 router.get("/ordenesDeCompra", (req, res)=>{
   DetalleCompra.findAll()
