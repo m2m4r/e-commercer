@@ -14,18 +14,17 @@ router.use("/productos",prodAdmin)
 router.use("/ordenesDeCompra",ordenCompra)
 
 
-// Rutas para otorgar o rechazar el permiso de admin a usuarios registrados
-
-
 router.put('/darAdmin/:id', AuthAdmin, async (req, res) => {
   await User.update({ permiso: 'admin' }, { where: { id: req.params.id } })
   res.status(201).send('Usuario promovido a administrador.')
 })
 
+
 router.put('/sacarAdmin/:id',AuthAdmin, async (req, res) => {
   await User.update({ permiso: 'user' }, { where: { id: req.params.id } })
   res.status(201).send('Usuario revocado del permiso a administrador.')
 })
+
 
 
 
