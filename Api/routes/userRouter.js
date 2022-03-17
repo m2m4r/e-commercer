@@ -90,8 +90,20 @@ router.post("/logout", (req, res) => {
   res.sendStatus(200);
 });
 
-// Añadir producto al carrito
+router.get("/productos/:id", async (req, res) => {
+  try {
+    const producto = await Productos.findOne({ 
+      where: { id: req.params.id }, 
+      include: {
+        model: Interaccion
+      }});
+    res.send(producto);
+  } catch {
+    res.sendStatus(404);
+  }
+});
 
+// Añadir producto al carrito
 router.post("/:id/addToCart", Auth, async (req, res) => {
   try {
     const producto = await Productos.findByPk(req.params.id, {

@@ -9,24 +9,37 @@ const { AuthAdmin } = require("../controllers/middleware/auth"); //middleware pa
 
 const router = express.Router();
 
+
 router.use("/categorias",catAdmin)
 router.use("/productos",prodAdmin)
 router.use("/ordenesDeCompra",ordenCompra)
-
 
 router.put('/darAdmin/:id', AuthAdmin, async (req, res) => {
   await User.update({ permiso: 'admin' }, { where: { id: req.params.id } })
   res.status(201).send('Usuario promovido a administrador.')
 })
 
-
 router.put('/sacarAdmin/:id',AuthAdmin, async (req, res) => {
   await User.update({ permiso: 'user' }, { where: { id: req.params.id } })
   res.status(201).send('Usuario revocado del permiso a administrador.')
 })
 
+// falta el Auth de Admin
+router.get('/usuario/:id', async (req, res) => {
+  try {
+    const usuario = await User.findOne({ 
+      where: { 
+        id: req.params.id 
+      }, 
+      include: {
+        model: Interaccion
+      }});
 
-
-
+    res.send(usuario)
+  }
+  catch(error){
+    res.send(error);
+  }
+})
 
 module.exports= router
