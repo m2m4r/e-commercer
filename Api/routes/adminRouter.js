@@ -1,5 +1,5 @@
 const express = require("express");
-const {User,DetalleCompra} = require("../models");
+const {User,DetalleCompra, Interaccion} = require("../models");
 const catAdmin = require("./categoriaAdmin")
 const prodAdmin = require("./productoAdmin")
 const ordenCompra = require("./productoAdmin")
@@ -9,13 +9,10 @@ const { AuthAdmin } = require("../controllers/middleware/auth"); //middleware pa
 
 const router = express.Router();
 
+
 router.use("/categorias",catAdmin)
 router.use("/productos",prodAdmin)
 router.use("/ordenesDeCompra",ordenCompra)
-
-
-// Rutas para otorgar o rechazar el permiso de admin a usuarios registrados
-
 
 router.put('/darAdmin/:id', AuthAdmin, async (req, res) => {
   await User.update({ permiso: 'admin' }, { where: { id: req.params.id } })
@@ -27,7 +24,7 @@ router.put('/sacarAdmin/:id',AuthAdmin, async (req, res) => {
   res.status(201).send('Usuario revocado del permiso a administrador.')
 })
 
-
+// falta el Auth de Admin
 
 
 module.exports= router

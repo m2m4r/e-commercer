@@ -17,6 +17,8 @@
 .desc {
   width: 50%;
   margin: auto;
+
+  margin-top: 8%;
 }
 
 .nose {
@@ -32,7 +34,7 @@ p {
 div.nose h1 {
   font-size: 2rem;
   color: black;
-  margin-bottom: 80px;
+  margin-bottom: 40px;
   margin-top: 15px;
 }
 
@@ -55,10 +57,31 @@ div.nose span {
   gap: 5px;
   grid-template-columns: repeat(5, 1fr);
   margin: 3% 0;
+  width: 60%;
 }
 .botons {
   cursor: pointer;
   line-height: 42px;
   border: 1.5px solid rgb(231, 231, 231);
   background-color: transparent;
+}
+
+.selectedBtn {
+  border: 1.5px solid rgb(0, 0, 0);
+}
+
+.cantidad {
+  width: 20%;
+  line-height: 34px;
+  border: 1.5px solid rgb(231, 231, 231);
+  background-color: transparent;
+  margin-left: 2%;
+}
+
+div label {
+  margin-left: 2%;
+}
+
+.mt-7 {
+  margin-top: 10%;
 }
