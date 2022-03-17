@@ -31,8 +31,13 @@ router.put('/sacarAdmin/:id', async (req, res) => {
 // falta el Auth de Admin
 router.delete('/usuario/:id', async (req, res) => {
   try {
-    await User.destroy({ where: { id: req.params.id } });
-    res.send("Usuario eliminado");
+    const usuario = await User.findOne({ where: { id: req.params.id } });
+    if(usuario.id === req.user.id) {
+      res.send('No te podés eliminar a vos mismo.')
+    } else {
+      await User.destroy({ where: { id: usuario.id } })
+      res.send("Usuario eliminado");
+    }
   } catch (error) {
     res.send(error);
   }
@@ -45,7 +50,9 @@ router.get("/usuarios", async (req, res) => {
 })
 
 router.post("/productos/nuevo", async (req, res) => {
+
   let obj = {};
+  
   const producto = await Productos.create({
     modelo: req.body.modelo,
     price: req.body.price,
@@ -54,14 +61,17 @@ router.post("/productos/nuevo", async (req, res) => {
     descripcion: req.body.descripcion,
   });
 
-  const agregarCategorias = req.body.categorias.map((categoria) => {
+let agregarCategorias;
+  if(!!req.body.categorias.length){
+  agregarCategorias = req.body.categorias.map((categoria) => {
     return {
       categoriaId: categoria,
       productoId: producto.id,
     };
-  });
-
+  })
   CatPro.bulkCreate(agregarCategorias);
+  };
+
 
   res.send("creado o modificado");
 });
@@ -104,7 +114,7 @@ router.post("/productos/:id/stock", async (req, res) => {
     res.send(error);
   }
 });
-
+// falta el Auth de Admin
 router.get("/productos", async (req, res) => {
   try {
     const productos = await Productos.findAll({
@@ -126,7 +136,7 @@ router.get("/productos", async (req, res) => {
     res.send(error);
   }
 });
-
+// falta el Auth de Admin
 router.get("/productos/:id/stock", async (req, res) => {
   try {
     const productos = await Inventario.findAll(
@@ -152,7 +162,7 @@ router.get("/productos/:id/stock", async (req, res) => {
     res.send(error);
   }
 });
-
+// falta el Auth de Admin
 router.delete("/productos/:id", async (req, res) => {
   try {
     const productos = await Productos.destroy(
@@ -234,13 +244,14 @@ router.put("/categorias", async (req, res) => {
   }
 });
 
-
+// falta el Auth de Admin
 router.get("/ordenesDeCompra", (req, res)=>{
   DetalleCompra.findAll()
   .then(todos => res.send(todos))
+  .catch(err => res.send(err))
 
 })
-
+// falta el Auth de Admin
 router.get("/ordenesDeCompraPendientes", (req, res)=>{
   DetalleCompra.findAll({
     where:{
@@ -248,10 +259,11 @@ router.get("/ordenesDeCompraPendientes", (req, res)=>{
     }
   })
   .then(todos => res.send(todos))
+  .catch(err => res.send(err))
 
 })
 
-
+// falta el Auth de Admin
 router.put("/ordenesDeCompraPendientes/:id", async (req, res)=>{
   let compra = await DetalleCompra.findByPk(req.params.id)
   await compra.update({estado_compra:req.body.nuevo_estado})
@@ -272,9 +284,9 @@ router.put("/ordenesDeCompraPendientes/:id", async (req, res)=>{
     to: compra.datos_contacto.email,
     subject: `Tu compra fue ${req.body.nuevo_estado}!`,
     html: (req.body.nuevo_estado === "aceptada")?(
-        '<b>Se procesó tu pago correctamente.</b>'
+        '<b>Se procesó tu pago correctamente. Felicitaciones por tu compra, esperamos que la disfrutes!</b>'
       ):(
-        "<b>Tu pago fue rechazado.</b>"
+        "<b>Tu pago fue rechazado, por lo que la compra no se ejecutó. Volve a nuestro sitio para volver intentarlo.</b>"
       )
   })
 
