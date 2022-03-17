@@ -13,6 +13,8 @@ import { cart } from "./states/cart";
 import { useSelector } from "react-redux";
 import Footer from "./componets/Footer";
 import SendPage from "./componets/SendPage";
+import Pagination from "./componets/Pagination";
+import PaginationMarca from "./componets/PaginationMarca";
 
 /* Renderizado condicional, admin y carrito si no hay un User loggeado */
 
@@ -50,6 +52,8 @@ function App() {
         <Route path="/detail/:id" element={<CardDetail />} />
         <Route path="/carrito" element={<Carrito />} />
         <Route path="/datos_de_envio" element={<SendPage />} />
+        <Route path="/categoria" element={<Pagination />} />
+        <Route path="/marca/:marca" element={<PaginationMarca />} />
       </Routes>
       <Footer />
     </div>

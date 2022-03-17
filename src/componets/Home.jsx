@@ -2,13 +2,15 @@ import Grid from "../commons/Grid";
 import { useSelector } from "react-redux";
 const Home = () => {
   const products = useSelector((state) => state.productos); //Esto es lo que se tiene que usar
-  const masVendidos = products.filter(
-    (p) => p.categorias.length && p.categorias[0].cat == "Mas Vendidos"
-  );
+  const masVendidos = products
+    .filter((p) => p.categorias.length && p.categorias[0].cat == "Mas Vendidos")
+    .slice(0, 8);
 
   const newReleases = products.filter((p) => !p.categorias.length).slice(0, 8);
 
-  const airJordan = products.filter((p) => p.marca == "Air Jordan").slice(0, 8);
+  const airJordan = products
+    .filter((p) => p.marca == "Air Jordan")
+    .slice(12, products.length - 1);
 
   return (
     <main>

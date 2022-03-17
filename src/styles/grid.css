@@ -18,3 +18,14 @@
 .contenedor h1 {
   margin: 5% 50% 0 0;
 }
+
+.gridP {
+  display: grid;
+  grid-template-columns: repeat(3, 270px);
+  gap: 20px;
+  padding: 0 80px;
+  justify-content: center;
+  width: 80%;
+  margin-left: 10%;
+  margin-top: 2%;
+}

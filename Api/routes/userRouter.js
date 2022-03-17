@@ -62,18 +62,31 @@ router.post("/logout", (req, res) => {
   res.sendStatus(200);
 });
 
-router.delete('/autoDestroy', Auth, async (req, res) => {
+router.delete("/autoDestroy", Auth, async (req, res) => {
   try {
     await User.destroy({ where: { id: req.user.id } });
     res.send("Usuario eliminado");
   } catch (error) {
     res.send(error);
   }
-})
+});
 
 router.get("/productos/:id", async (req, res) => {
   try {
-    const producto = await Productos.findOne({ where: { id: req.params.id } });
+    const producto = await Productos.findOne({
+      where: { id: req.params.id },
+      include: [
+        {
+          model: Inventario,
+        },
+        {
+          model: Categoria,
+          through: {
+            attributes: ["cat"],
+          },
+        },
+      ],
+    });
     res.send(producto);
   } catch {
     res.sendStatus(404);
@@ -93,7 +106,6 @@ router.get("/productos", async (req, res) => {
             attributes: ["cat"],
           },
         },
-        
       ],
     });
     res.send(productos);
@@ -301,15 +313,15 @@ router.get("/search/producto", async (req, res) => {
       where: {
         [S.Op.or]: [
           {
-              modelo: { 
-                [S.Op.iLike]:"%"+query[llave]+"%",
-              },
+            modelo: {
+              [S.Op.iLike]: "%" + query[llave] + "%",
             },
-            {
-              marca: {
-                [S.Op.iLike]: "%"+query[llave]+"%",
-              },
+          },
+          {
+            marca: {
+              [S.Op.iLike]: "%" + query[llave] + "%",
             },
+          },
         ],
       },
     });
@@ -424,24 +436,20 @@ router.get("/productos/pages/:page", async (req, res) => {
   }
 });
 
-
 router.get("/review/:id/", async (req, res) => {
   try {
-    
     const review = await Productos.findOne({
       where: {
-        id: req.params.id
+        id: req.params.id,
       },
-      include: {   
-            model: Interaccion,
- 
-      }
+      include: {
+        model: Interaccion,
+      },
     });
 
-    res.send(review.interaccions)
-
+    res.send(review.interaccions);
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.send(error);
   }
 });
