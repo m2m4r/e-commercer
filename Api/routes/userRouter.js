@@ -157,7 +157,7 @@ router.get("/category", async (req, res) => {
 router.post("/finalizar_compra", Auth, async (req, res) => {
   const userAuth = process.env.MAIL;
   const passAuth = process.env.CONTRASEÑA;
-
+  
   let Transporter = await nodemailer.createTransport({
     service: "gmail",
     port: 465,
@@ -167,10 +167,44 @@ router.post("/finalizar_compra", Auth, async (req, res) => {
       pass: 'mikzmknpflldwbae',
     },
   });
+  
+  const items=  await CartItem.findAll({
+    where: {
+      userId: req.user.id,
+    },
+  });
+
+  
+
+  let productosComprados = [];
+  
+  await Promise.all(items.map(async (item) => {
+
+    const producto = await Productos.findOne({where:{id:item.dataValues.productoId}})
+
+   
+
+    productosComprados.push(producto.dataValues)
+
+
+    const itemModif= await Inventario.findOne({
+      where:{
+        product_id: item.dataValues.productoId,
+        talle: item.dataValues.talle
+      }
+    })
+    const stockNuevo= itemModif.stock-item.dataValues.cantidad
+
+   await itemModif.update({stock:stockNuevo})
+   await itemModif.save()
+    
+  }));
+
+  
 
   const compraUsuario = await DetalleCompra.create({
     userId: req.user.id,
-    productos_comprados: req.body.productos_comprados,
+    productos_comprados: productosComprados,
     precio_final: req.body.precio_final,
     forma_entrega: req.body.forma_entrega,
     medio_de_pago: req.body.medio_de_pago,
@@ -218,11 +252,15 @@ router.post("/finalizar_compra", Auth, async (req, res) => {
     `, // html body
   });
 
-  CartItem.destroy({
+
+
+
+  await CartItem.destroy({
     where: {
       userId: req.user.id,
     },
   });
+
 
   res.send(
     "Tu compra fue realizada con éxito, recibiras un email con información detallada al respecto."
