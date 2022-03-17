@@ -8,7 +8,7 @@ const cors = require("cors");
 const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
-// var GoogleStrategy = require('passport-google-oidc');
+const GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
 
 const routes = require("./routes");
 const db = require("./db/index");
@@ -58,9 +58,30 @@ passport.use(
   )
 );
 
+const GOOGLE_CLIENT_ID = "1017765309252-5j92jrgderqvo4ho2m80b56um05a48u6.apps.googleusercontent.com"
+const GOOGLE_CLIENT_SECRET = "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"
+
+const authUser = async (request, accessToken, refreshToken, profile, done) => {
+  const user = await User.findOne({
+    where: {
+      email: profile.email
+    }
+  })
+  return done(null, user);
+}
+
+passport.use(new GoogleStrategy({
+  clientID:     GOOGLE_CLIENT_ID,
+  clientSecret: GOOGLE_CLIENT_SECRET,
+  callbackURL: "http://localhost:3001/api/users/auth/google/callback",
+  passReqToCallback   : true
+}, authUser));
+
+
 passport.serializeUser(function (user, done) {
   done(null, user.id);
 });
+
 
 passport.deserializeUser(function (id, done) {
   User.findByPk(id)
@@ -70,13 +91,6 @@ passport.deserializeUser(function (id, done) {
     })
     .catch(done);
 });
-
-
-
-
-
-
-
 
 
 app.use("/api", routes);

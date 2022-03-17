@@ -52,7 +52,7 @@ router.get("/usuarios", async (req, res) => {
 router.post("/productos/nuevo", async (req, res) => {
 
   let obj = {};
-
+  
   const producto = await Productos.create({
     modelo: req.body.modelo,
     price: req.body.price,
@@ -61,7 +61,7 @@ router.post("/productos/nuevo", async (req, res) => {
     descripcion: req.body.descripcion,
   });
 
-  let agregarCategorias;
+let agregarCategorias;
   if(!!req.body.categorias.length){
   agregarCategorias = req.body.categorias.map((categoria) => {
     return {
@@ -114,7 +114,7 @@ router.post("/productos/:id/stock", async (req, res) => {
     res.send(error);
   }
 });
-
+// falta el Auth de Admin
 router.get("/productos", async (req, res) => {
   try {
     const productos = await Productos.findAll({
@@ -136,7 +136,7 @@ router.get("/productos", async (req, res) => {
     res.send(error);
   }
 });
-
+// falta el Auth de Admin
 router.get("/productos/:id/stock", async (req, res) => {
   try {
     const productos = await Inventario.findAll(
@@ -162,7 +162,7 @@ router.get("/productos/:id/stock", async (req, res) => {
     res.send(error);
   }
 });
-
+// falta el Auth de Admin
 router.delete("/productos/:id", async (req, res) => {
   try {
     const productos = await Productos.destroy(
@@ -244,13 +244,14 @@ router.put("/categorias", async (req, res) => {
   }
 });
 
-
+// falta el Auth de Admin
 router.get("/ordenesDeCompra", (req, res)=>{
   DetalleCompra.findAll()
   .then(todos => res.send(todos))
+  .catch(err => res.send(err))
 
 })
-
+// falta el Auth de Admin
 router.get("/ordenesDeCompraPendientes", (req, res)=>{
   DetalleCompra.findAll({
     where:{
@@ -258,10 +259,11 @@ router.get("/ordenesDeCompraPendientes", (req, res)=>{
     }
   })
   .then(todos => res.send(todos))
+  .catch(err => res.send(err))
 
 })
 
-
+// falta el Auth de Admin
 router.put("/ordenesDeCompraPendientes/:id", async (req, res)=>{
   let compra = await DetalleCompra.findByPk(req.params.id)
   await compra.update({estado_compra:req.body.nuevo_estado})
@@ -282,9 +284,9 @@ router.put("/ordenesDeCompraPendientes/:id", async (req, res)=>{
     to: compra.datos_contacto.email,
     subject: `Tu compra fue ${req.body.nuevo_estado}!`,
     html: (req.body.nuevo_estado === "aceptada")?(
-        '<b>Se procesó tu pago correctamente.</b>'
+        '<b>Se procesó tu pago correctamente. Felicitaciones por tu compra, esperamos que la disfrutes!</b>'
       ):(
-        "<b>Tu pago fue rechazado.</b>"
+        "<b>Tu pago fue rechazado, por lo que la compra no se ejecutó. Volve a nuestro sitio para volver intentarlo.</b>"
       )
   })
 
