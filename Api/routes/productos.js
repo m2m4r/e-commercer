@@ -34,23 +34,9 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Traer un producto especifico
 
-router.get("/:id", async (req, res) => {
-  try {
-    const producto = await Productos.findOne({
-      where: {
-        id: req.params.id 
-      },
-      include:{
-        model: Interaccion
-      }
-    })
-    res.send(producto);
-  } catch {
-    res.sendStatus(404);
-  }
-});
+
+
 
 // Funcion pagination
 
@@ -106,6 +92,37 @@ router.post("/search", async (req, res) => {
     res.send(productos);
   } catch (error) {
     res.status(500).send(error);
+  }
+});
+
+
+// Traer un producto especifico
+router.get("/:id", async (req, res) => {
+  try {
+    const producto = await Productos.findOne({ 
+
+      where: { id: req.params.id },
+      include: [
+        {
+          model: Inventario,
+        },
+        {
+          model: Interaccion
+        },
+        {
+          model: Categoria,
+          through: {
+            attributes: ["cat"],
+          },
+        },
+        
+        
+      ], 
+    });
+
+    res.send(producto);
+  } catch {
+    res.sendStatus(404);
   }
 });
 

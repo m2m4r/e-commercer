@@ -1,5 +1,5 @@
 const express = require("express");
-const {User,DetalleCompra} = require("../models");
+const {User,DetalleCompra, Interaccion} = require("../models");
 const catAdmin = require("./categoriaAdmin")
 const prodAdmin = require("./productoAdmin")
 const ordenCompra = require("./productoAdmin")
@@ -25,21 +25,6 @@ router.put('/sacarAdmin/:id',AuthAdmin, async (req, res) => {
 })
 
 // falta el Auth de Admin
-router.get('/usuario/:id', async (req, res) => {
-  try {
-    const usuario = await User.findOne({ 
-      where: { 
-        id: req.params.id 
-      }, 
-      include: {
-        model: Interaccion
-      }});
 
-    res.send(usuario)
-  }
-  catch(error){
-    res.send(error);
-  }
-})
 
 module.exports= router

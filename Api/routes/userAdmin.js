@@ -1,5 +1,5 @@
 const express = require("express");
-const {User} = require("../models");
+const {User,Interaccion} = require("../models");
 
 const { AuthAdmin } = require("../controllers/middleware/auth");
 
@@ -21,6 +21,23 @@ router.delete('/:id',AuthAdmin, async (req, res) => {
   router.get("/", AuthAdmin,async (req, res) => {
     const usuarios = await User.findAll()
     res.send(usuarios);
+  })
+
+  router.get('/:id', async (req, res) => {
+    try {
+      const usuario = await User.findOne({ 
+        where: { 
+          id: req.params.id 
+        }, 
+        include: {
+          model: Interaccion
+        }});
+  
+      res.send(usuario)
+    }
+    catch(error){
+      res.send(error);
+    }
   })
 
 
