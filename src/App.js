@@ -33,13 +33,7 @@ function App() {
       })
       .catch((err) => console.log(err));
   }, []);
-<<<<<<< HEAD
-  useEffect(()=>{dispatch(cart())
-    .then((res)=>{console.log("3",res)})
-    .catch(err=>console.log(err))
-  }, [usuario])
 
-=======
   useEffect(() => {
     dispatch(cart())
       .then((res) => {
@@ -47,7 +41,7 @@ function App() {
       })
       .catch((err) => console.log(err));
   }, [usuario]);
->>>>>>> 2ac2db228e9af498afd47b706ffe7e30c7a9f0a3
+
   return (
     <div className="App">
       <Navbar />
