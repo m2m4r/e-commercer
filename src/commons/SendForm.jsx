@@ -3,7 +3,12 @@ import { useNavigate } from "react-router";
 import "../styles/form.css";
 import { useState } from "react";
 import axios from "axios";
+import { sendAdress } from "../states/send";
+import { useDispatch } from "react-redux";
+
+
 const SendForm = ({user}) => {
+    const dispatch = useDispatch()
     const [data , setData] = useState(user)
     const [edit , setEdit] = useState(true)
     const [btn , setBtn] = useState("fa-solid fa-unlock")
@@ -18,6 +23,7 @@ const SendForm = ({user}) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if(!direccion.value){editar(); return}
+        dispatch(sendAdress({direccion : direccion.value , fullName : name.value , dni : dni.value , telefono : telefono.value , email:email.value}))
         if(check){
             axios
             .put('/api/users/edit' , {direccion:direccion.value})
@@ -25,6 +31,8 @@ const SendForm = ({user}) => {
                 setData(res.data)
                 navigate("/buy")})
             .catch(err=>console.log(err))
+        }else{
+          navigate("/buy")
         }
     };
     const comprando = () => {
@@ -39,8 +47,8 @@ const SendForm = ({user}) => {
     };  
     return (
       <form id="login" className="container" onSubmit={handleSubmit}>
-        <div id="margen" class="field">
-          <p id="borderText" class="control">
+        <div id="margen" className="field">
+          <p id="borderText" className="control">
             <a id="sessionTitle" >Datos de envío</a>
           </p>
         </div>
@@ -56,7 +64,7 @@ const SendForm = ({user}) => {
               disabled={edit}
             />
             <span className="icon is-small is-left">
-              <i class="fa-solid fa-user"></i>
+              <i className="fa-solid fa-user"></i>
             </span>
           </p>
         </div>
@@ -71,7 +79,7 @@ const SendForm = ({user}) => {
               disabled={edit}
             />
             <span className="icon is-small is-left">
-            <i class="fa-solid fa-address-card"></i>
+            <i className="fa-solid fa-address-card"></i>
             </span>
           </p>
         </div>
@@ -79,7 +87,7 @@ const SendForm = ({user}) => {
           <p id="anchoInput" className="control has-icons-left has-icons-right">
             <input {...dni} className="input" type="number" placeholder="DNI" required="true" disabled={edit}/>
             <span className="icon is-small is-left">
-              <i class="fa-solid fa-id-card"></i>
+              <i className="fa-solid fa-id-card"></i>
             </span>
           </p>
         </div>

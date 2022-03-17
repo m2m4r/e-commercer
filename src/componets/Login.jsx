@@ -29,8 +29,12 @@ const Login = function () {
         if(res.payload===undefined){
           setBoton(<SubmitBtn clase="button is-success is-fullwidth" valor="Sing In"/>)
           setError(<ErrorMessage/>)
-        return};
-        navigate("/");
+        return}
+        if(res.payload.permiso==="user"){
+          navigate("/")
+        }else{
+          navigate("/admin")
+        };
       });
   };
   const register = () => {
@@ -69,7 +73,7 @@ const Login = function () {
       {error}
       <div id="margen" className="field">
         <p id="borderText" className="control">
-          <a>No estas registrado?</a>
+          <a href="http://localhost:3001/api/users/auth/google">Iniciar sesion con Google</a>
         </p>
       </div>
       <div id="margen" className="field">
