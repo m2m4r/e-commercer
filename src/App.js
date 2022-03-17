@@ -15,6 +15,10 @@ import Footer from "./componets/Footer";
 import SendPage from "./componets/SendPage";
 import Pagination from "./componets/Pagination";
 import PaginationMarca from "./componets/PaginationMarca";
+import BuyPage from "./componets/BuyPage";
+import Confirm from "./componets/Confirm";
+import AdminPage from "./componets/AdminPage";
+
 
 /* Renderizado condicional, admin y carrito si no hay un User loggeado */
 
@@ -35,6 +39,7 @@ function App() {
       })
       .catch((err) => console.log(err));
   }, []);
+
   useEffect(() => {
     dispatch(cart())
       .then((res) => {
@@ -42,6 +47,7 @@ function App() {
       })
       .catch((err) => console.log(err));
   }, [usuario]);
+
   return (
     <div className="App">
       <Navbar />
@@ -54,6 +60,9 @@ function App() {
         <Route path="/datos_de_envio" element={<SendPage />} />
         <Route path="/categoria" element={<Pagination />} />
         <Route path="/marca/:marca" element={<PaginationMarca />} />
+        <Route path="/buy" element={<BuyPage />} />
+        <Route path="/confirm" element={<Confirm />} />
+        <Route path="/admin" element={<AdminPage />} />
       </Routes>
       <Footer />
     </div>
@@ -61,16 +70,3 @@ function App() {
 }
 
 export default App;
-
-/*
-Las routes quedan aca hasta que estén listos los componentes a renderizar 
-<Routes>
-        
-        <Route path="/register" element={"register"} />
-        <Route path="/login" element={"login"} />
-        <Route path="/admin" element={"admin"} />
-        <Route path="/cart" element={"cart"} />
-
-        <Route path="/sku" element={"productCard"} />
-</Routes>
-*/
