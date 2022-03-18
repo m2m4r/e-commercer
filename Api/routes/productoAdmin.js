@@ -85,6 +85,8 @@ router.post("/nuevo", AuthAdmin, async (req, res) => {
   router.get("/", async (req, res) => {
     try {
       const productos = await Productos.findAll({
+        order: [
+          ['id', 'ASC']],
         include: [
           {
             model: Inventario,
@@ -94,9 +96,9 @@ router.post("/nuevo", AuthAdmin, async (req, res) => {
             model: Categoria,
             attributes: ["cat"],
           },
+
         ],
-        order: [
-          [Inventario, 'talle', 'ASC']]
+        
       });
       res.send(productos);
     } catch (error) {
