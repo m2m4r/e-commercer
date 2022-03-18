@@ -1,8 +1,7 @@
 const AlertCompra = (display) => {
-  console.log(display.display);
   return (
     <div
-      className="notification"
+      className="notification as-text-centred"
       style={{
         width: "40vw",
         top: "1rem",

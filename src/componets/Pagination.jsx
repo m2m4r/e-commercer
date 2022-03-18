@@ -40,7 +40,9 @@ const Pagination = () => {
     item.push(
       <li key={i}>
         <a
-          className="pagination-link is-current"
+          className={
+            i == page ? "pagination-link is-current" : "pagination-link"
+          }
           aria-label="Page 1"
           aria-current="page"
           onClick={() => {

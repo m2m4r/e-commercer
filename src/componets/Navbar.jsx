@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import "../styles/navbar.css";
 import logo from "../assets/logoMarca.png";
 import logoCarrito from "../assets/carrito.png";
@@ -10,6 +10,7 @@ import axios from "axios";
 
 const Navbar = () => {
   const user = useSelector((state) => state.user);
+  const [search, setSearch] = useState("");
 
   const logout = () => {
     axios.post("/api/users/logout");

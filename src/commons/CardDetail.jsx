@@ -8,13 +8,18 @@ import { SizeContext } from "../context/size";
 import { useParams } from "react-router";
 import axios from "axios";
 import AlertCompra from "./AlertCompra";
+import Review from "./Review";
+import Stars from "./Stars";
+import { StarsReviewContext } from "../context/starsReview";
 
 const CardDetail = () => {
   const { producto, setProducto } = useContext(ProductContext);
+  const { stars } = useContext(StarsReviewContext);
   const { size } = useContext(SizeContext);
   const [cantidad, setCantidad] = useState(0);
   const [display, setDisplay] = useState(false);
   const id = useParams();
+  const [review, setReview] = useState("");
 
   useEffect(() => {
     axios
@@ -22,11 +27,11 @@ const CardDetail = () => {
       .then((data) => {
         setProducto(data.data);
       });
+
     window.scrollTo(0, 0);
   }, [id]);
 
   const dispatch = useDispatch();
-  console.log(display);
 
   const sendCart = () => {
     dispatch(
@@ -37,7 +42,14 @@ const CardDetail = () => {
       })
     ).then(() => setDisplay(true));
   };
-  console.log(display);
+
+  const submitReview = (e) => {
+    axios.post(`/api/users/review/${id.id}`, {
+      comentario: review,
+      rating: stars,
+    });
+  };
+
   return producto.inventarios ? (
     <>
       <AlertCompra display={display} />
@@ -80,8 +92,27 @@ const CardDetail = () => {
                 />
               </label>
             </div>
-            <p>{producto.descripcion}</p>
+            <p className="descripcion">{producto.descripcion}</p>
           </div>
+        </div>
+      </div>
+      <h1 className="has-text-centered title">REVIEWS</h1>
+      <div className="container">
+        <form action="" onSubmit={submitReview}>
+          <input
+            class="input is-large"
+            type="text"
+            placeholder="..."
+            value={review}
+            onChange={(e) => setReview(e.target.value)}
+          ></input>
+
+          <Stars />
+          <button className="button is-dark send">Enviar</button>
+        </form>
+        <div>
+          {producto.interaccions &&
+            producto.interaccions.map((c, i) => <Review coment={c} key={i} />)}
         </div>
       </div>
     </>
