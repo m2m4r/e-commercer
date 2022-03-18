@@ -1,0 +1,1 @@
+INSERT INTO users VALUES (10,'admin','admin',null,'admin','ade_come_commerce=# INSERT INTO users VALUES (6,'admin','admin',null,'admin','admin@gmail.com','1234',null,null,null,'admin','2022-03-16 17:00:06.807-03','2022-03-16 17:00:06.807-03');

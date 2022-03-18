@@ -1,5 +1,10 @@
 const express = require("express");
-const { Productos, Interaccion } = require("../models");
+
+const {
+  Productos,
+  Interaccion,
+  User,
+} = require("../models");
 const { Auth } = require("../controllers/middleware/auth");
 const router = express.Router();
 
@@ -14,6 +19,21 @@ router.get("/:id", async (req, res) => {
       include: {
         model: Interaccion,
       },
+
+      include: [
+        {
+          model: Interaccion,
+          include: [{
+            model:User,
+            attributes:["usuario"]
+           
+          
+          }],
+          
+        }
+    ]
+      
+
     });
 
     res.send(review.interaccions);

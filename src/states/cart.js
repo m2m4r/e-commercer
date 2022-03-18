@@ -25,8 +25,12 @@ export const updateCartItem = createAsyncThunk(
         cantidad: array[1],
         talle: array[2],
       })
-      .then((res) => res.data)
-      .catch((err) => err);
+      .then((res) => {
+        if(res.statusText=="OK")return res.data
+        })
+      .catch((err) => {
+        return axios.get(`/api/users/carrito`).then((res) => res.data)
+      });
   }
 );
 

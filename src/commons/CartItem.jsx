@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import "../styles/form.css";
 import { useDispatch } from "react-redux";
 import { updateCartItem, deleteCartItem } from "../states/cart";
-import cart from "../states/cart";
 
 const CartItem = function ({ producto }) {
   const dispatch = useDispatch();
@@ -15,10 +14,10 @@ const CartItem = function ({ producto }) {
       .then((res) => setItem(res.data))
       .catch((err) => console.log(err));
   }, []);
+  const cantidadAnterior=producto.cantidad
   const handleDelete = () => {
     dispatch(deleteCartItem(producto.id))
       .then((res) => console.log("eliminado", res))
-      .catch((err) => console.log(err));
   };
   const resta = () => {
     if (producto.cantidad > 0) {
@@ -41,7 +40,9 @@ const CartItem = function ({ producto }) {
         producto.talle,
       ])
     )
-      .then((r) => console.log("modificado", r))
+      .then((r) => {
+        cantidadAnterior===producto.cantidad?alert("Al límite de stock"):console.log("modificado", r)
+      })
       .catch((err) => console.log(err));
   };
   return (

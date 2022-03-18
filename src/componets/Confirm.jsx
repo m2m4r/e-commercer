@@ -1,14 +1,21 @@
 import axios from "axios"
 import { useDispatch, useSelector } from "react-redux"
+import { Navigate, useNavigate } from "react-router"
 import { cart } from "../states/cart"
+import SubmitBtn from "../commons/SubmitBtn";
+import Loading from "../commons/Loading";
+import { useState } from "react";
 
 
 const Confirm = function (){
+    const navigate = useNavigate()
     const dispatch = useDispatch()
+    const [boton , setBoton] = useState("button is-success is-fullwidth")
     const user = useSelector(state=>state.user)
     const cartItems=useSelector((state)=>state.cart)
     const direccion = useSelector(state=>state.send)
     const finalizar = ()=>{
+        setBoton("button is-success is-loading is-fullwidth")
         const compra = {
             productos_comprados: cartItems,
             precio_final: !cartItems[0]?0:cartItems.map((Obj)=>Obj.cantidad * Obj.costo).reduce((accumulator, curr) => accumulator + curr),
@@ -20,7 +27,12 @@ const Confirm = function (){
         .post("api/users/finalizar_compra" , compra)
         .then(()=>{
             console.log("compra exitosa")
-            dispatch(cart().then(()=>{console.log("carrito actualizado")}).catch(err=>console.log(err)))
+            dispatch(cart())
+            .then(()=>{
+                console.log("carrito actualizado")
+                navigate("/")
+            })
+            .catch(err=>console.log(err))
         })
         .catch(err=>console.log(err))
     }
@@ -53,7 +65,7 @@ const Confirm = function (){
             <span>Monto total de compra:</span><span>{`$ ${!cartItems[0]?0:cartItems.map((Obj)=>Obj.cantidad * Obj.costo).reduce((accumulator, curr) => accumulator + curr)}`}</span>
             </div>
             <div class="modal-footer">
-                <button onClick={finalizar} type="button" class="btn btn-primary">Comprar</button>
+                <button onClick={finalizar} type="button" class={boton}>Comprar</button>
             </div>
             </div>
         </div>

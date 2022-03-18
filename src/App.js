@@ -18,6 +18,8 @@ import PaginationMarca from "./componets/PaginationMarca";
 import BuyPage from "./componets/BuyPage";
 import Confirm from "./componets/Confirm";
 import AdminPage from "./componets/AdminPage";
+import { prodListAdmin } from "./states/admin";
+import TalleRow from "./commons/TalleRow";
 
 
 /* Renderizado condicional, admin y carrito si no hay un User loggeado */
@@ -47,6 +49,13 @@ function App() {
       })
       .catch((err) => console.log(err));
   }, [usuario]);
+  useEffect(() => {
+    dispatch(prodListAdmin())
+      .then((res) => {
+        console.log("4", res);
+      })
+      .catch((err) => console.log(err));
+  }, [usuario]);
 
   return (
     <div className="App">
@@ -63,6 +72,7 @@ function App() {
         <Route path="/buy" element={<BuyPage />} />
         <Route path="/confirm" element={<Confirm />} />
         <Route path="/admin" element={<AdminPage />} />
+        <Route path="/stock" element={<TalleRow />} />
       </Routes>
       <Footer />
     </div>
