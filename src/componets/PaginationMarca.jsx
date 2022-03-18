@@ -5,19 +5,70 @@ import axios from "axios";
 import { useParams } from "react-router";
 const PaginationMarca = () => {
   const [productMarca, setProductMarca] = useState([]);
+  const [marcaCopy, setMarcaCopy] = useState([]);
   const marc = useParams();
+  const [page, setPage] = useState(1);
+  const [pageRender, setPageRender] = useState(0);
+  const prodXpag = 12;
+
+  const maxPage = Math.ceil(productMarca.length / prodXpag);
+
+  window.scrollTo(0, 0);
+
+  if (page !== pageRender && productMarca.length) {
+    if (page >= maxPage) {
+      setMarcaCopy(
+        productMarca.slice((page - 1) * prodXpag, productMarca.length)
+      );
+    } else {
+      setMarcaCopy(productMarca.slice((page - 1) * prodXpag, page * prodXpag));
+    }
+    setPageRender(page);
+  }
+
+  const nextPage = () => {
+    if (page < maxPage) {
+      setPage(page + 1);
+    } else {
+    }
+    if (page >= maxPage) {
+      setMarcaCopy(
+        productMarca.slice((page - 1) * prodXpag, productMarca.length)
+      );
+    } else {
+      setMarcaCopy(productMarca.slice((page - 1) * prodXpag, page * prodXpag));
+    }
+  };
+
+  let item = [];
+  for (let i = 1; i <= maxPage; i++) {
+    item.push(
+      <li key={i}>
+        <a
+          className={
+            i == page ? "pagination-link is-current" : "pagination-link"
+          }
+          aria-label="Page 1"
+          aria-current="page"
+          onClick={() => {
+            setPage(i);
+          }}
+        >
+          {i}
+        </a>
+      </li>
+    );
+  }
 
   useEffect(() => {
     axios
-      .get(
-        `http://localhost:3001/api/users/search/producto?query=${marc.marca}`
-      )
+      .post(`/api/users/productos/search?query=${marc.marca}`)
       .then((data) => setProductMarca(data.data));
   }, [marc]);
   return (
     <>
       <GridPagination
-        products={productMarca}
+        products={marcaCopy}
         title={marc.marca.toUpperCase().replace("&", " ")}
       />
       <div className="container">
@@ -29,33 +80,22 @@ const PaginationMarca = () => {
           <a
             className="pagination-previous is-disabled"
             title="This is the first page"
+            onClick={() => {
+              if (page > 1) {
+                setPage(page - 1);
+              } else {
+                setPage(1);
+              }
+            }}
           >
             Previous
           </a>
 
-          <a className="pagination-next">Next page</a>
+          <a className="pagination-next" onClick={nextPage}>
+            Next page
+          </a>
 
-          <ul className="pagination-list">
-            <li>
-              <a
-                className="pagination-link is-current"
-                aria-label="Page 1"
-                aria-current="page"
-              >
-                1
-              </a>
-            </li>
-            <li>
-              <a className="pagination-link" aria-label="Goto page 2">
-                2
-              </a>
-            </li>
-            <li>
-              <a className="pagination-link" aria-label="Goto page 3">
-                3
-              </a>
-            </li>
-          </ul>
+          <ul className="pagination-list">{item}</ul>
         </nav>
       </div>
     </>

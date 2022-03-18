@@ -1,4 +1,5 @@
 const express = require("express");
+
 const {
   Productos,
   Interaccion,
@@ -11,11 +12,14 @@ const router = express.Router();
 
 router.get("/:id", async (req, res) => {
   try {
-    
     const review = await Productos.findOne({
       where: {
-        id: req.params.id
+        id: req.params.id,
       },
+      include: {
+        model: Interaccion,
+      },
+
       include: [
         {
           model: Interaccion,
@@ -29,12 +33,12 @@ router.get("/:id", async (req, res) => {
         }
     ]
       
+
     });
 
-    res.send(review.interaccions)
-
+    res.send(review.interaccions);
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.send(error);
   }
 });
@@ -78,6 +82,5 @@ router.delete("/:id", Auth, async (req, res) => {
     res.send("Eliminaste tu comentario, deja tu opinion cuando quieras.")
   );
 });
-
 
 module.exports = router;
