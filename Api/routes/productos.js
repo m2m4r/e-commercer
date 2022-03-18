@@ -3,8 +3,7 @@ const {
   Productos,
   Inventario,
   Interaccion,
-  Categoria,
-  CatPro
+  Categoria
 } = require("../models");
 const S = require("sequelize");
 const router = express.Router();
