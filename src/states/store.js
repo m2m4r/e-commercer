@@ -5,6 +5,8 @@ import userReducer from "./usario";
 import productsReducer from "./productos";
 import cartReducer from "./cart";
 import sendReducer from "./send";
+import adminReducer from "./admin";
+import inventarioReducer from "./inventario";
 
 const store = configureStore({
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
@@ -12,7 +14,9 @@ const store = configureStore({
     user: userReducer,
     productos: productsReducer,
     cart: cartReducer,
-    send: sendReducer
+    send: sendReducer,
+    admin: adminReducer,
+    inventario : inventarioReducer
   },
 });
 

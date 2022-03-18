@@ -100,7 +100,8 @@ router.post("/nuevo", AuthAdmin, async (req, res) => {
           },
         ],
         order: [
-          [Inventario, 'talle', 'ASC']]
+          ['createdAt', 'ASC']
+        ]
       });
       res.send(productos);
     } catch (error) {
