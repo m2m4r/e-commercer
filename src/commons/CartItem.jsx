@@ -41,7 +41,7 @@ const CartItem = function ({ producto }) {
       ])
     )
       .then((r) => {
-        cantidadAnterior===producto.cantidad?alert("Al límite de stock"):console.log("modificado", r)
+        console.log("modificado", r)
       })
       .catch((err) => console.log(err));
   };
