@@ -98,7 +98,6 @@ router.post("/nuevo", AuthAdmin, async (req, res) => {
           },
 
         ],
-        
       });
       res.send(productos);
     } catch (error) {
