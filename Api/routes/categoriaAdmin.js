@@ -43,7 +43,7 @@ router.post("/agregar",AuthAdmin, async (req, res) => {
 
 
 
-  router.delete("/", async (req, res) => {
+  router.delete("/",AuthAdmin, async (req, res) => {
     try {
       const categoria = await Categoria.destroy({
         where: {

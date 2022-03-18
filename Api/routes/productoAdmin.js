@@ -57,7 +57,7 @@ router.post("/nuevo", AuthAdmin, async (req, res) => {
   
   // Ingresar o modificar el inventario
 
-  router.post("/:id/stock",  async (req, res) => {
+  router.post("/:id/stock", AuthAdmin, async (req, res) => {
     try {
       const [producto, created] = await Inventario.findOrCreate({
         where: { product_id: req.params.id, talle: req.body.talle },
@@ -108,7 +108,7 @@ router.post("/nuevo", AuthAdmin, async (req, res) => {
 
   //Devuelve stock de un producto
   
-  router.get("/:id/stock", async (req, res) => {
+  router.get("/:id/stock",AuthAdmin ,async (req, res) => {
     try {
       const productos = await Inventario.findAll(
         {
@@ -155,9 +155,9 @@ router.post("/nuevo", AuthAdmin, async (req, res) => {
   });
 
 
-//stock full
+//trea todo el stock full
 
-  router.get("/stock", async (req, res) => {
+  router.get("/stock",AuthAdmin, async (req, res) => {
     try {
       const productos = await Inventario.findAll({
           order: [
