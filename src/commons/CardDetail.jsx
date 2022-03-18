@@ -13,6 +13,7 @@ import Stars from "./Stars";
 import { StarsReviewContext } from "../context/starsReview";
 
 const CardDetail = () => {
+  const user = useSelector((state) => state.user);
   const { producto, setProducto } = useContext(ProductContext);
   const { stars } = useContext(StarsReviewContext);
   const { size } = useContext(SizeContext);
@@ -52,7 +53,7 @@ const CardDetail = () => {
 
   return producto.inventarios ? (
     <>
-      <AlertCompra display={display} />
+      <AlertCompra display={{ display, setDisplay }} />
       <div className="cardetail">
         <div className="foto">
           <img className="fotito" src={producto.image_url} alt="" />
@@ -97,19 +98,25 @@ const CardDetail = () => {
         </div>
       </div>
       <h1 className="has-text-centered title">REVIEWS</h1>
-      <div className="container">
-        <form action="" onSubmit={submitReview}>
-          <input
-            class="input is-large"
-            type="text"
-            placeholder="..."
-            value={review}
-            onChange={(e) => setReview(e.target.value)}
-          ></input>
+      <div className="container coment">
+        {user.id ? (
+          <form action="" onSubmit={submitReview}>
+            <input
+              className="input is-large"
+              type="text"
+              placeholder="..."
+              value={review}
+              onChange={(e) => setReview(e.target.value)}
+            ></input>
+            <Stars />
+            <button className="button is-dark send">Enviar</button>
+          </form>
+        ) : (
+          <h1 className="has-text-centered title">
+            Debes loguearte para dejar una review
+          </h1>
+        )}
 
-          <Stars />
-          <button className="button is-dark send">Enviar</button>
-        </form>
         <div>
           {producto.interaccions &&
             producto.interaccions.map((c, i) => <Review coment={c} key={i} />)}

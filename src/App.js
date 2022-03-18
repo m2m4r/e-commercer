@@ -21,7 +21,6 @@ import AdminPage from "./componets/AdminPage";
 import { prodListAdmin } from "./states/admin";
 import TalleRow from "./commons/TalleRow";
 
-
 /* Renderizado condicional, admin y carrito si no hay un User loggeado */
 
 function App() {
@@ -68,7 +67,7 @@ function App() {
         <Route path="/carrito" element={<Carrito />} />
         <Route path="/datos_de_envio" element={<SendPage />} />
         <Route path="/categoria" element={<Pagination />} />
-        <Route path="/marca/:marca" element={<PaginationMarca />} />
+        <Route path="/productos/:marca" element={<PaginationMarca />} />
         <Route path="/buy" element={<BuyPage />} />
         <Route path="/confirm" element={<Confirm />} />
         <Route path="/admin" element={<AdminPage />} />

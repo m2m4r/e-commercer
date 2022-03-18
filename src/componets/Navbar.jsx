@@ -7,10 +7,22 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Carrito from "./Carrito";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { useNavigate } from "react-router";
 
 const Navbar = () => {
   const user = useSelector((state) => state.user);
-  const [search, setSearch] = useState("");
+  const [searchInput, setSearchInput] = useState("");
+
+  const navigate = useNavigate();
+
+  const searchOnChange = (e) => {
+    setSearchInput(e.target.value);
+  };
+
+  const onSubmit = () => {
+    navigate(`productos/${searchInput}`);
+  };
+  console.log(searchInput);
 
   const logout = () => {
     axios.post("/api/users/logout");
@@ -23,14 +35,15 @@ const Navbar = () => {
       aria-label="main navigation"
     >
       <div className="field has-addons">
-        <div className="control" id="Search">
+        <form onSubmit={onSubmit} className="control" id="Search">
           <input
-            className="input"
-            id="inputSearch"
+            className="input is-info"
             type="text"
-            placeholder="Buscar"
+            placeholder="Search models..."
+            value={searchInput}
+            onChange={searchOnChange}
           />
-        </div>
+        </form>
       </div>
 
       <div id="navbarBasicExample" className="navbar-menu">
@@ -38,16 +51,15 @@ const Navbar = () => {
           <a className="navbar-link">Sneakers</a>
 
           <div className="navbar-dropdown">
-            <Link to="/marca/nike" className="navbar-item">
+            <Link to="/productos/nike" className="navbar-item">
               Nike
             </Link>
-            <Link to="/marca/adidas" className="navbar-item">
+            <Link to="/productos/adidas" className="navbar-item">
               Adidas
             </Link>
-            <Link to="/marca/air&jordan" className="navbar-item">
+            <Link to="/productos/air&jordan" className="navbar-item">
               Air Jordan
             </Link>
-            <a className="navbar-item">Otras marcas</a>
           </div>
         </div>
         <div className="navbar-item ">
