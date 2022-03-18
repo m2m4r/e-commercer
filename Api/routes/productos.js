@@ -1,10 +1,5 @@
 const express = require("express");
-const {
-  Productos,
-  Inventario,
-  Interaccion,
-  Categoria
-} = require("../models");
+const { Productos, Inventario, Interaccion, Categoria } = require("../models");
 const S = require("sequelize");
 const router = express.Router();
 
@@ -22,20 +17,17 @@ router.get("/", async (req, res) => {
           through: {
             attributes: ["cat"],
           },
-        },{
-          model: Interaccion
-        }
-      ]
+        },
+        {
+          model: Interaccion,
+        },
+      ],
     });
     res.send(productos);
   } catch (error) {
     res.send(error);
   }
 });
-
-
-
-
 
 // Funcion pagination
 
@@ -75,15 +67,15 @@ router.post("/search", async (req, res) => {
       where: {
         [S.Op.or]: [
           {
-              modelo: { 
-                [S.Op.iLike]: query[llave]+"%",
-              },
+            modelo: {
+              [S.Op.iLike]: "%" + query[llave] + "%",
             },
-            {
-              marca: {
-                [S.Op.iLike]: query[llave]+"%",
-              },
+          },
+          {
+            marca: {
+              [S.Op.iLike]: "%" + query[llave] + "%",
             },
+          },
         ],
       },
     });
@@ -94,19 +86,17 @@ router.post("/search", async (req, res) => {
   }
 });
 
-
 // Traer un producto especifico
 router.get("/:id", async (req, res) => {
   try {
-    const producto = await Productos.findOne({ 
-
+    const producto = await Productos.findOne({
       where: { id: req.params.id },
       include: [
         {
           model: Inventario,
         },
         {
-          model: Interaccion
+          model: Interaccion,
         },
         {
           model: Categoria,
@@ -114,9 +104,7 @@ router.get("/:id", async (req, res) => {
             attributes: ["cat"],
           },
         },
-        
-        
-      ], 
+      ],
     });
 
     res.send(producto);
@@ -124,6 +112,5 @@ router.get("/:id", async (req, res) => {
     res.sendStatus(404);
   }
 });
-
 
 module.exports = router;

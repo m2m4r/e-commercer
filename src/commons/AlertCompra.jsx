@@ -1,4 +1,7 @@
-const AlertCompra = (display) => {
+import { useSelector } from "react-redux";
+const AlertCompra = ({ display }) => {
+  const user = useSelector((state) => state.user);
+
   return (
     <div
       className="notification as-text-centred"
@@ -10,10 +13,20 @@ const AlertCompra = (display) => {
         display: display.display ? "block" : "none",
       }}
     >
-      <button className="delete"></button>
-      <strong>Producto agregado al carrito</strong>
+      <button
+        className="delete"
+        onClick={() => {
+          display.setDisplay(false);
+        }}
+      ></button>
+      <strong>
+        {user.id
+          ? "Producto agregado al carrito"
+          : "Debes loguearte para añadir tu compra al carrito"}
+      </strong>
     </div>
   );
 };
 
 export default AlertCompra;
+//display: display.display ? "block" : "none",
