@@ -15,27 +15,27 @@ const Inventario = function ({prod , inv , i}){
         const option = {
             id:prod.id,
             talle:inv.talle,
-            cantidad:cantidad
+            stock:cantidad
         }
         dispatch(addStock(option))
     }
     return (
-        <div class="row" key={i}>
-        <div class="col-md-1"><span>{prod.marca}</span></div>
-        <div class="col-md-6"><span>{prod.modelo}</span></div>
-        <div class="col-md-2">
+        <div className="row" key={i}>
+        <div className="col-md-1"><span>{prod.marca}</span></div>
+        <div className="col-md-6"><span>{prod.modelo}</span></div>
+        <div className="col-md-2">
             <span>{inv.talle}</span>
         </div>
-        <div class="col-md-2">
+        <div className="col-md-2">
             <span>{cantidad}</span>
-            <button onClick={resta} id="btn" className="button is-small">
-                <i className="fa-solid fa-minus"></i>
+            <button onClick={resta} id="btn" classNameName="button is-small">
+                <i classNameName="fa-solid fa-minus"></i>
             </button>
-            <button onClick={suma} className="button is-small">
-                <i className="fa-solid fa-plus"></i>
+            <button onClick={suma} classNameName="button is-small">
+                <i classNameName="fa-solid fa-plus"></i>
             </button>
         </div>
-        <div class="col-md-1"><button onClick={guardar}>Save</button></div>
+        <div className="col-md-1"><button onClick={guardar}>Save</button></div>
     </div>
     )
 }

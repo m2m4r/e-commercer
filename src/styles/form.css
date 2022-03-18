@@ -86,6 +86,7 @@
   max-width: 400px;
 }
 
+
 p.control button.is-link {
   background-color: dimgray;
 }
@@ -99,4 +100,14 @@ form.container input#margen {
 }
 form.container input#margen:hover {
   background-color: gray;
+
+#canvasProducto{
+  margin: auto;
+}
+#addProducto{
+  max-width: 600px;
+  min-width: 500px;
+  display: flex;
+  flex-direction: column;
+
 }
