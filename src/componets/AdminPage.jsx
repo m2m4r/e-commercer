@@ -2,6 +2,7 @@ import AdminRow from "../commons/AdminRow"
 import { useDispatch, useSelector } from "react-redux"
 import { useState } from "react"
 import { addProduct } from "../states/admin"
+import "../styles/form.css";
 
 const AdminPage = function(){
     const ProductList = useSelector(state=>state.admin)

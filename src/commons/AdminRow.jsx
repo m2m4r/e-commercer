@@ -2,6 +2,7 @@ import { Link } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router"
 import { inventarioTalle } from "../states/inventario"
+import "../styles/form.css";
 
 const AdminRow = function({producto}){
     const dispatch = useDispatch()
