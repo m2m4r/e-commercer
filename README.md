@@ -1,4 +1,4 @@
-# GEcommerce Plataforma Sneakers
+# Ecommerce Plataforma Sneakers
 
 Este es un trabajo realizado en dos semanas en un el bootcamp de Plataforma 5. Basado en una lógica de negocio orientada a una eccommerce.
 El stack de tecnologías esta basado en NODE JS, REACT, JAVASCRIPT y POSTGRESQL. 
