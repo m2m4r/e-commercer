@@ -4,16 +4,23 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "bulma/css/bulma.min.css";
-import {BrowserRouter} from 'react-router-dom'
-import store from "./store/store";
-import {Provider} from "react-redux"
-
+import { BrowserRouter } from "react-router-dom";
+import { Provider } from "react-redux";
 import store from "./states/store";
+import ProductContextProvider from "./context/product";
+import SizeContextProvider from "./context/size";
+import StarsReviewProvider from "./context/starsReview";
 
 ReactDOM.render(
   <BrowserRouter>
     <Provider store={store}>
-      <App />
+      <ProductContextProvider>
+        <SizeContextProvider>
+          <StarsReviewProvider>
+            <App />
+          </StarsReviewProvider>
+        </SizeContextProvider>
+      </ProductContextProvider>
     </Provider>
   </BrowserRouter>,
   document.getElementById("root")

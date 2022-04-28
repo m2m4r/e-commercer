@@ -10,6 +10,7 @@
   border-radius: 10px;
   background-color: azure;
   margin-bottom: 20px;
+  cursor: pointer;
 }
 
 p {

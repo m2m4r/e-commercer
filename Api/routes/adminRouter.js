@@ -1,86 +1,42 @@
 const express = require("express");
-const {
-  User,
-  CartItem,
-  Interaccion,
-  Productos,
-  Inventario,
-} = require("../models");
+
+const {User} = require("../models");
+const catAdmin = require("./categoriaAdmin")
+const prodAdmin = require("./productoAdmin")
+const ordenCompra = require("./productoAdmin")
+const userAdmin = require("./userAdmin")
+
+
+const { AuthAdmin } = require("../controllers/middleware/auth"); //middleware para comprobar que el usuario logeado sea admin
 
 const router = express.Router();
 
-router.post("/productos/nuevo", async (req, res) => {
-  const producto = await Productos.create(
-    {
-      modelo: req.body.modelo,
-      price: req.body.price,
-      image_url: req.body.image,
-      marca: req.body.marca,
-      descripcion: req.body.desc ,
-      talles: [{ talle: req.body.talle, stock: req.body.stock }],
-    },
-    {
-      include: [
-        {
-          model: Inventario,
-          as: "talles",
-        },
-      ],
-    }
-  );
+router.use("/categorias", catAdmin);
+router.use("/productos", prodAdmin);
+router.use("/ordenesDeCompra", ordenCompra);
 
-  res.send("creado o modificado");
+
+router.put("/darAdmin/:id", AuthAdmin, async (req, res) => {
+  await User.update({ permiso: "admin" }, { where: { id: req.params.id } });
+  res.status(201).send("Usuario promovido a administrador.");
 });
 
-router.post("/productos/:id/actualizar", async (req, res) => {
-  console.log(req.body);
+router.use("/categorias",catAdmin)
+router.use("/productos",prodAdmin)
+router.use("/ordenesDeCompra",ordenCompra)
+router.use("/users",userAdmin)
 
-  Productos.findOne({
-    where: {
-      id: req.params.id,
-    },
-  })
-    .then((res) => res.dataValues)
-    .then((productos) => {
-      console.log("estos es antes del update", productos);
 
-      return Productos.update(req.body, { where: { id: productos.id } });
-    })
-    .then((prodModif) => console.log(prodModif));
-
-  res.send("modificado");
+router.put("/sacarAdmin/:id", AuthAdmin, async (req, res) => {
+  await User.update({ permiso: "user" }, { where: { id: req.params.id } });
+  res.status(201).send("Usuario revocado del permiso a administrador.");
 });
 
-/* router.post("/productos/:id/stock", async (req, res) => {
-    
-   
-    Productos.findOne({
-    where: {
-      id: req.params.id,
-    },
-  })
-  .then((res)=>res.dataValues)
-  .then(productos=>{
-     
-
-     return Productos.update(req.body,{where:{id: productos.id}})
-    })
-    .then((prodModif)=>console.log(prodModif))
-
-  res.send("modificado");
-}); */
-
-router.get("/productos/", async (req, res) => {
-  const productos = await Productos.findAll({
-    include: [
-      {
-        model: Inventario,
-        as: "talles",
-      },
-    ],
-  });
-
-  res.send(productos);
+router.get("/usuarios", async (req, res) => {
+  const usuarios = await User.findAll();
+  res.send(usuarios);
 });
+
+// falta el Auth de Admin
 
 module.exports = router;

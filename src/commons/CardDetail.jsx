@@ -1,27 +1,130 @@
 import "../styles/cardetail.css";
+import { ProductContext } from "../context/product";
+import { useContext, useEffect, useState } from "react";
+import ButtonSize from "./ButtonSize";
+import { useDispatch, useSelector } from "react-redux";
+import { addCartItem } from "../states/cart";
+import { SizeContext } from "../context/size";
+import { useParams } from "react-router";
+import axios from "axios";
+import AlertCompra from "./AlertCompra";
+import Review from "./Review";
+import Stars from "./Stars";
+import { StarsReviewContext } from "../context/starsReview";
+
 const CardDetail = () => {
-  const product = {
-    img: "https://cdn.flightclub.com/2200/TEMPLATE/288272/1.jpg",
-    marca: "Air Jordan",
-    model: "AIR JORDAN 6 RETRO 'UNC HOME'",
-    price: 289,
-    description:
-      "The Air Jordan 6 Retro 'UNC Home' pays homage to Michael Jordan’s alma mater, bearing a colorway reminiscent of the University of North Carolina. The classic hoops sneakers feature a white leather upper set against University Blue nubuck underlays. Hits of navy appear on the molded TPU heel tab and collar lining. Navy repeats on the midsole, which houses visible Air-sole cushioning. The jock tag on the heel reinforces the shoe’s varsity athletics theme.",
+  const user = useSelector((state) => state.user);
+  const { producto, setProducto } = useContext(ProductContext);
+  const { stars } = useContext(StarsReviewContext);
+  const { size } = useContext(SizeContext);
+  const [cantidad, setCantidad] = useState(0);
+  const [display, setDisplay] = useState(false);
+  const id = useParams();
+  const [review, setReview] = useState("");
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3001/api/users/productos/${id.id}`)
+      .then((data) => {
+        setProducto(data.data);
+      });
+
+    window.scrollTo(0, 0);
+  }, [id]);
+
+  const dispatch = useDispatch();
+
+  const sendCart = () => {
+    dispatch(
+      addCartItem({
+        productId: producto.id,
+        cantidad: Number(cantidad),
+        talle: Number(size),
+      })
+    ).then(() => setDisplay(true));
   };
 
-  return (
-    <div className="cardetail">
-      <div className="foto">
-        <img className="fotito" src={product.img} alt="" />
-      </div>
-      <div className="desc">
-        <div className="nose">
-          <span>{product.marca}</span>
-          <h1>{product.model}</h1>
-          <p>{product.description}</p>
+  const submitReview = (e) => {
+    axios.post(`/api/users/review/${id.id}`, {
+      comentario: review,
+      rating: stars,
+    });
+  };
+
+  return producto.inventarios ? (
+    <>
+      <AlertCompra display={{ display, setDisplay }} />
+      <div className="cardetail">
+        <div className="foto">
+          <img className="fotito" src={producto.image_url} alt="" />
+        </div>
+        <div className="desc">
+          <div className="nose">
+            <span>{producto.marca}</span>
+            <h1>{producto.modelo}</h1>
+            <div>
+              <div>
+                <strong>Tabla de talles</strong>
+              </div>
+              <div className="gridButton">
+                {producto.inventarios.map((t, i) => (
+                  <ButtonSize key={i} talle={t.talle} />
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h3>Precio ${producto.price}</h3>
+              <button
+                className="boton"
+                onClick={() => {
+                  sendCart();
+                }}
+              >
+                {" "}
+                Añadir al Carrito
+              </button>
+              <label>
+                Cantidad:
+                <input
+                  type="number"
+                  className="cantidad"
+                  onChange={(e) => setCantidad(e.target.value)}
+                />
+              </label>
+            </div>
+            <p className="descripcion">{producto.descripcion}</p>
+          </div>
         </div>
       </div>
-    </div>
+      <h1 className="has-text-centered title">REVIEWS</h1>
+      <div className="container coment">
+        {user.id ? (
+          <form action="" onSubmit={submitReview}>
+            <input
+              className="input is-large"
+              type="text"
+              placeholder="..."
+              value={review}
+              onChange={(e) => setReview(e.target.value)}
+            ></input>
+            <Stars />
+            <button className="button is-dark send">Enviar</button>
+          </form>
+        ) : (
+          <h1 className="has-text-centered title">
+            Debes loguearte para dejar una review
+          </h1>
+        )}
+
+        <div>
+          {producto.interaccions &&
+            producto.interaccions.map((c, i) => <Review coment={c} key={i} />)}
+        </div>
+      </div>
+    </>
+  ) : (
+    <h1 className="mt-7 is-size-1 has-text-centered"> Cargando aguanta ...</h1>
   );
 };
 

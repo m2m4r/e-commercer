@@ -1,5 +1,5 @@
 {
-    "database": "e-commerce",
+    "database": "e_commerce",
     "options": {
       "dialect": "postgres",
       "host": "localhost",

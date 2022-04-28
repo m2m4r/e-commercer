@@ -1,0 +1,54 @@
+#Navbar {
+  background-color: black;
+  position: absolute;
+  width: 100%;
+  position: fixed;
+  top: 0;
+}
+
+.navbar-item {
+  background-color: black;
+}
+.navbar-menu {
+  background-color: black;
+}
+#Search {
+  width: 280px;
+  background-color: black;
+  margin-left: 5%;
+  margin-top: 5%;
+  margin-bottom: auto;
+}
+#inputSearch {
+  border-radius: 3px;
+  border: 2px solid rgba(253, 252, 252, 0.493);
+  display: flex;
+  position: relative;
+  transition: border-color 200ms ease 0s, width 100ms ease 0s;
+  width: 240px;
+  pointer-events: auto;
+  background-color: transparent;
+}
+
+#inputSearch placeholder {
+  color: white;
+}
+
+#logoMarca {
+  margin-left: 25%;
+  text-align: center;
+}
+
+#botonRegistro {
+  background-color: black;
+}
+#botonLogin {
+  background-color: black;
+  color: white;
+}
+
+#botonCarrito {
+  background-color: black;
+  border: 2px solid white;
+  color: white;
+}
